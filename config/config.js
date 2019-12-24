@@ -26,7 +26,8 @@ export default {
                 {path: '/category/index', component: './Category/Index'},
                 {path: '/brand/index', component: './Brand/Index'},
                 {path: '/specificationGroup/index', component: './SpecificationGroup/Index'},
-                {path: '/specificationParamName/index', component: './SpecificationParamName/Index'}
+                {path: '/specificationParamName/index', component: './SpecificationParamName/Index'},
+                {path: '/item/index', component: './Item/Index'},
             ]
         }
     ],

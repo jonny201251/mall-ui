@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react'
 import {Icon, Row, Col} from 'antd'
 import Form, {FormItem, FormCore} from 'noform'
-import {Input, Cascader, Upload} from 'nowrapper/lib/antd'
+import {Input, TreeSelect, Upload} from 'nowrapper/lib/antd'
 import request from '../../utils/request'
 import styles from './upload.less'
 
@@ -12,7 +12,7 @@ const adminControllerPath = '/mall/category'
 
 class CRUDForm extends PureComponent {
     state = {
-        cascadeData: [],
+        treeSelectData: [],
         display: 'none',
         defaultFileList: []
     }
@@ -45,11 +45,13 @@ class CRUDForm extends PureComponent {
                     status: 'done'
                 }]
             })
+        }else{
+            this.core.setValues({categoryArr:[]})
         }
         //取出 商品类目
-        request.get(adminControllerPath + '/cascade').then(res => {
+        request.get(adminControllerPath + '/treeSelect').then(res => {
             if (res && res.code === 1) {
-                this.setState({cascadeData: res.data})
+                this.setState({treeSelectData: res.data})
             }
         })
     }
@@ -65,8 +67,7 @@ class CRUDForm extends PureComponent {
                 <FormItem label="品牌名称" name="name" required={true}><Input/></FormItem>
                 <FormItem label="LOGO首字母" name="letter"><Input/></FormItem>
                 <FormItem label="商品类目" name="categoryArr" required={true}>
-                    <Cascader options={this.state.cascadeData} changeOnSelect={true}
-                              showSearch={() => this.search(inputValue, path)} placeholder={''}/>
+                    <TreeSelect treeData={this.state.treeSelectData}  treeCheckable showCheckedStrategy={TreeSelect.SHOW_PARENT}/>
                 </FormItem>
                 <FormItem label="品牌LOGO"/>
                 <div style={{paddingLeft: 112}}>
