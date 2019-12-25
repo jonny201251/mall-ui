@@ -21,17 +21,16 @@ export default {
             path: '/',
             component: '../layouts/AdminLayout',
             routes: [
-                {path: '/', redirect: '/demo/index'},
-                {path: '/demo/index', component: './Demo/Index'},
-                {path: '/category/index', component: './Category/Index'},
-                {path: '/brand/index', component: './Brand/Index'},
-                {path: '/specificationGroup/index', component: './SpecificationGroup/Index'},
-                {path: '/specificationParamName/index', component: './SpecificationParamName/Index'},
-                {path: '/item/index', component: './Item/Index'},
+                {path: '/', redirect: '/categoryList'},
+                {path: '/categoryList', component: './Category/CategoryList'},
+                {path: '/brandList', component: './Brand/BrandList'},
+                {path: '/complexSpecificationGroupList', component: './ComplexSpecification/SpecificationGroup/SpecificationGroupList'},
+                {path: '/complexSpecificationParamNameList', component: './ComplexSpecification/SpecificationParamName/SpecificationParamList'},
+                {path: '/itemList', component: './Item/ItemList'},
             ]
         }
     ],
-    /*    theme:{
+/*        theme:{
             "primary-color": "#1DA57A"
         },*/
     proxy: {

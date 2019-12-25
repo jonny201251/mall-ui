@@ -1,37 +1,18 @@
 import React, {PureComponent} from 'react'
-import {Modal, message, Spin} from 'antd'
+import {Modal, message} from 'antd'
 import List, {Filter, Table, Pagination} from 'nolist/lib/wrapper/antd'
 import {Input, Dialog, Button} from 'nowrapper/lib/antd'
 import classNames from 'classnames'
 import styles from '../common.less'
 
-import CRUDForm from './CRUDForm'
+import ItemForm from './ItemForm'
 import request from '../../utils/request'
 
 let globalList
-const adminContextPath = '/mall'
-const adminControllerPath = '/mall/brand'
+const adminControllerPath = '/mall/category'
 
-
-class Index extends PureComponent {
-    state = {
-        fileList: [],
-        defaultFileList: []
-    }
-
-    putFileToState = file => {
-        this.setState({fileList: [...this.state.fileList, file]})
-        return false
-    }
-    removeFileFromState = file => {
-        this.setState(state => {
-            const index = state.fileList.indexOf(file);
-            const newFileList = state.fileList.slice();
-            newFileList.splice(index, 1);
-            return {fileList: newFileList}
-        })
-    }
-
+class ItemList extends PureComponent {
+    state = {}
     handleOperator = (type) => {
         if ('create' === type) {
             Dialog.show({
@@ -40,30 +21,15 @@ class Index extends PureComponent {
                 locale: 'zh',
                 width: 400,
                 enableValidate: true,
-                content: <CRUDForm option={{type}} putFileToState={this.putFileToState}
-                                   removeFileFromState={this.removeFileFromState}/>,
+                content: <ItemForm option={{type}}/>,
                 onOk: (values, hide) => {
                     hide()
-                    //准备附件数据
-                    const formData = new FormData();
-                    this.state.fileList.forEach((file) => {
-                        formData.append('files', file)
-                    })
-                    const modal = Modal.info({
-                        title: '提示',
-                        content: <div><Spin/>正在操作中...</div>,
-                        okButtonProps: {disabled: true}
-                    })
-                    //将表单数据放入formData
-                    formData.append("form", JSON.stringify(values))
-                    //异步请求
-                    request.post(adminControllerPath + '/add', {data: formData}).then(res => {
+                    request.post(adminControllerPath + '/add', {data: {...values}}).then(res => {
                         if (res && res.code === 1) {
                             message.success("操作成功")
-                            modal.destroy()
                             globalList.refresh()
                         } else {
-                            modal.update({content: '操作失败,请联系管理员!', okButtonProps: {disabled: false}})
+                            message.error("操作失败")
                         }
                     })
                 }
@@ -82,30 +48,15 @@ class Index extends PureComponent {
                         locale: 'zh',
                         width: 400,
                         enableValidate: true,
-                        content: <CRUDForm option={{type, record: res.data}} putFileToState={this.putFileToState}
-                                           removeFileFromState={this.removeFileFromState}/>,
+                        content: <ItemForm option={{type, record: res.data}}/>,
                         onOk: (values, hide) => {
                             hide()
-                            //准备附件数据
-                            const formData = new FormData();
-                            this.state.fileList.forEach((file) => {
-                                formData.append('files', file)
-                            })
-                            const modal = Modal.info({
-                                title: '提示',
-                                content: <div><Spin/>正在操作中...</div>,
-                                okButtonProps: {disabled: true}
-                            })
-                            //将表单数据放入formData
-                            formData.append("form", JSON.stringify(values))
-                            //异步请求
-                            request.post(adminControllerPath + '/edit', {data: formData}).then(res => {
+                            request.post(adminControllerPath + '/edit', {data: {...values}}).then(res => {
                                 if (res && res.code === 1) {
                                     message.success("操作成功")
-                                    modal.destroy()
                                     globalList.refresh()
                                 } else {
-                                    modal.update({content: '操作失败,请联系管理员!', okButtonProps: {disabled: false}})
+                                    message.error("操作失败")
                                 }
                             })
                         }
@@ -127,8 +78,8 @@ class Index extends PureComponent {
                 content: <p>确定要删除<span style={{fontWeight: 'bold'}}>类目名称=<span
                     style={{color: 'red'}}>{this.state.record.name}</span></span>的数据吗?</p>,
                 onOk: (values, hide) => {
+                    hide()
                     request(adminControllerPath + '/delete?id=' + this.state.record.id).then(res => {
-                        hide()
                         if (res && res.code === 1) {
                             globalList.refresh()
                             message.success("删除成功")
@@ -170,6 +121,8 @@ class Index extends PureComponent {
                     <Button icon="plus" type="primary" onClick={() => this.handleOperator('create')}>新增</Button>
                     <Button icon="edit" type="primary" onClick={() => this.handleOperator('edit')}
                             className={styles.marginLeft20}>编辑</Button>
+                    <Button icon="search" type="primary" onClick={() => this.handleOperator('view')}
+                            className={styles.marginLeft20}>浏览</Button>
                     <Button icon="delete" type="primary" onClick={() => this.handleOperator('delete')}
                             className={styles.marginLeft20}>删除</Button>
                 </div>
@@ -179,13 +132,10 @@ class Index extends PureComponent {
                         onDoubleClick: () => this.clickOperation('onDoubleClick', record)
                     }
                 }}>
-                    <Table.Column title="名称" dataIndex="name"/>
-                    <Table.Column title="LOGO" dataIndex="image"
-                                  render={text => text ?
-                                      <img src={adminContextPath + text} style={{width: 102, height: 36}}/> : ''}/>
-                    <Table.Column title="首字母" dataIndex="letter"/>
-                    <Table.Column title="排序" dataIndex="sort"
-                                  defaultSortOrder={'ascend'} sorter={(a, b) => a.sort - b.sort}/>
+                    <Table.Column title="商品货号" dataIndex="sku_code"/>
+                    <Table.Column title="标题" dataIndex="name"/>
+                    <Table.Column title="价格" dataIndex="price"/>
+                    <Table.Column title="商品状态" dataIndex="saleable"/>
                 </Table>
                 <Pagination/>
             </List>
@@ -193,4 +143,4 @@ class Index extends PureComponent {
     }
 }
 
-export default Index
+export default ItemList

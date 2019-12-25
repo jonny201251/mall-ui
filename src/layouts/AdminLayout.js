@@ -1,7 +1,12 @@
 import React from 'react'
-import {Layout, Menu, Icon, LocaleProvider} from 'antd'
-import 'antd/dist/antd.css'
-import zh_CN from 'antd/lib/locale-provider/zh_CN'
+import {Icon, Layout, ConfigProvider, Menu} from 'antd'
+//antd、noform、nowrapper、nolist的样式
+import 'antd/dist/antd.less'
+import 'nowrapper/dist/antd/index.css'
+import 'noform/dist/index.css'
+import 'nolist/dist/wrapper/antd.css'
+
+import zhCN from 'antd/es/locale/zh_CN'
 import Link from 'umi/link'
 import styles from './AdminLayout.less'
 
@@ -20,21 +25,34 @@ class AdminLayout extends React.Component {
 
     render() {
         return (
-            <LocaleProvider locale={zh_CN}>
+            <ConfigProvider locale={zhCN}>
                 <Layout>
                     <Sider trigger={null} collapsible collapsed={this.state.collapsed} width={256}
                            style={{minHeight: '100vh', color: 'white'}}>
                         <div className={styles.logo}/>
-                        <Menu theme="dark" mode="inline" defaultSelectedKeys={['sub1']} defaultOpenKeys={['sub1']}>
+                        <Menu theme="dark" mode="inline" defaultSelectedKeys={['sub1']}
+                              defaultOpenKeys={['sub1', 'sub2']}>
                             <SubMenu
                                 key="sub1"
                                 title={<span><Icon type="credit-card"/><span>商品管理</span></span>}
                             >
-                                <Menu.Item key="3"><Link to="/category/index">商品类目</Link></Menu.Item>
-                                <Menu.Item key="4"><Link to="/brand/index">品牌管理</Link></Menu.Item>
-                                <Menu.Item key="5"><Link to="/specificationGroup/index">规格组</Link></Menu.Item>
-                                <Menu.Item key="6"><Link to="/specificationParamName/index">规格参数</Link></Menu.Item>
-                                <Menu.Item key="7"><Link to="/item/index">商品列表</Link></Menu.Item>
+                                <Menu.Item key="3"><Link to="/categoryList">商品类目</Link></Menu.Item>
+                                <Menu.Item key="4"><Link to="/brandList">品牌管理</Link></Menu.Item>
+                                <Menu.Item key="8"><Link to="/itemList">商品列表</Link></Menu.Item>
+                            </SubMenu>
+                            <SubMenu
+                                key="sub2"
+                                title={<span>规格管理</span>}
+                            >
+                                <SubMenu
+                                    key="sub3"
+                                    title={<span>复杂规格</span>}
+                                >
+                                    <Menu.Item key="5"><Link to="/complexSpecificationGroupList">规格组</Link></Menu.Item>
+                                    <Menu.Item key="6"><Link
+                                        to="/complexSpecificationParamNameList">规格参数</Link></Menu.Item>
+                                </SubMenu>
+                                <Menu.Item key="7"><Link to="/specificationParamNameList">简单规格</Link></Menu.Item>
                             </SubMenu>
                         </Menu>
                     </Sider>
@@ -59,7 +77,7 @@ class AdminLayout extends React.Component {
                         </Content>
                     </Layout>
                 </Layout>
-            </LocaleProvider>
+            </ConfigProvider>
         );
     }
 }

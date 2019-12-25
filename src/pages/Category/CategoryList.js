@@ -1,17 +1,18 @@
 import React, {PureComponent} from 'react'
-import {Modal, message} from 'antd'
-import List, {Filter, Table, Pagination} from 'nolist/lib/wrapper/antd'
-import {Input, Dialog, Button} from 'nowrapper/lib/antd'
+import {message, Modal} from 'antd'
+import List, {Filter, Pagination, Table} from 'nolist/lib/wrapper/antd'
+import {Button, Dialog, Input} from 'nowrapper/lib/antd'
+
 import classNames from 'classnames'
 import styles from '../common.less'
 
-import CRUDForm from './CRUDForm'
+import CategoryForm from './CategoryForm'
 import request from '../../utils/request'
 
 let globalList
 const adminControllerPath = '/mall/category'
 
-class Index extends PureComponent {
+class CategoryList extends PureComponent {
     state = {}
     handleOperator = (type) => {
         if ('create' === type) {
@@ -19,9 +20,9 @@ class Index extends PureComponent {
                 title: '新增',
                 footerAlign: 'label',
                 locale: 'zh',
-                width: 400,
+                width: 450,
                 enableValidate: true,
-                content: <CRUDForm option={{type}}/>,
+                content: <CategoryForm option={{type}}/>,
                 onOk: (values, hide) => {
                     hide()
                     request.post(adminControllerPath + '/add', {data: {...values}}).then(res => {
@@ -48,7 +49,7 @@ class Index extends PureComponent {
                         locale: 'zh',
                         width: 400,
                         enableValidate: true,
-                        content: <CRUDForm option={{type, record: res.data}}/>,
+                        content: <CategoryForm option={{type, record: res.data}}/>,
                         onOk: (values, hide) => {
                             hide()
                             request.post(adminControllerPath + '/edit', {data: {...values}}).then(res => {
@@ -143,4 +144,4 @@ class Index extends PureComponent {
     }
 }
 
-export default Index
+export default CategoryList
