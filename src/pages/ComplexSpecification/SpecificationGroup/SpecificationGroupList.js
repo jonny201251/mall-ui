@@ -9,7 +9,7 @@ import SpecificationGroupForm from './SpecificationGroupForm'
 import request from '../../../utils/request'
 
 let globalList
-const adminControllerPath = '/mall/specificationGroup'
+const adminControllerPath = '/mall/complexSpecGroup'
 const adminControllerPath2 = '/mall/category'
 
 class SpecificationGroupList extends PureComponent {

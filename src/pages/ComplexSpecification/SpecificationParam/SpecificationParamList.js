@@ -8,8 +8,8 @@ import SpecificationParamForm from './SpecificationParamForm'
 import request from '../../../utils/request'
 
 let globalList
-const adminControllerPath = '/mall/specificationParamName'
-const adminControllerPath1 = '/mall/specificationGroup'
+const adminControllerPath = '/mall/complexSpecParam'
+const adminControllerPath1 = '/mall/complexSpecGroup'
 const adminControllerPath2 = '/mall/category'
 
 class SpecificationParamList extends PureComponent {

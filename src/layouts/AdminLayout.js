@@ -48,11 +48,10 @@ class AdminLayout extends React.Component {
                                     key="sub3"
                                     title={<span>复杂规格</span>}
                                 >
-                                    <Menu.Item key="5"><Link to="/complexSpecificationGroupList">规格组</Link></Menu.Item>
-                                    <Menu.Item key="6"><Link
-                                        to="/complexSpecificationParamNameList">规格参数</Link></Menu.Item>
+                                    <Menu.Item key="5"><Link to="/complexSpecGroupList">规格组</Link></Menu.Item>
+                                    <Menu.Item key="6"><Link to="/complexSpecParamList">规格参数</Link></Menu.Item>
                                 </SubMenu>
-                                <Menu.Item key="7"><Link to="/specificationParamNameList">简单规格</Link></Menu.Item>
+                                <Menu.Item key="7"><Link to="/specificationParamList">简单规格</Link></Menu.Item>
                             </SubMenu>
                         </Menu>
                     </Sider>
