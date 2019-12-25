@@ -134,10 +134,10 @@ class SpecificationGroupList extends PureComponent {
         })
     }
 
-    onSelect = (selectedKeys, info) => {
+    onSelect = selectedKeys => {
         let categoryId = parseInt(selectedKeys[0])
         this.setState({categoryId})//点击分页时，传递的参数
-        this.list.setUrl(adminControllerPath + '/list/' + categoryId)
+        this.list.setUrl(adminControllerPath + '/list?categoryId=' + categoryId)
         this.list.refresh()
     }
 
@@ -150,7 +150,7 @@ class SpecificationGroupList extends PureComponent {
                     </Tree>
                 </Col>
                 <Col span={19}>
-                    <List url={adminControllerPath + '/list/' + this.state.categoryId} onError={this.handleError}
+                    <List url={adminControllerPath + '/list?category=' + (this.state.categoryId || -1)} onError={this.handleError}
                           onMount={this.onMount}>
                         <div className={styles.marginBottom10}>
                             <Button icon="plus" type="primary" onClick={() => this.handleOperator('create')}>新增</Button>

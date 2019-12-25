@@ -24,11 +24,11 @@ class SpecificationParamForm extends PureComponent {
     }
 
     componentWillMount() {
-        this.core.setValues({isNumeric: 0, isGeneric: 1, isSearching: 0})
+        this.core.setValues({digit: 0, generic: 1, searching: 0})
 
-        let {type, record, categoryId} = this.props.option
+        let {type, record, categoryId, groupId} = this.props.option
         if ('create' === type) {
-            this.core.setValues({categoryId})
+            this.core.setValues({categoryId, groupId})
         } else if ('edit' === type || 'view' === type) {
             this.core.setValues({...record})
             this.core.setGlobalStatus('edit' === type ? type : 'preview')
@@ -50,18 +50,18 @@ class SpecificationParamForm extends PureComponent {
                 <FormItem style={{display: 'none'}} name="categoryId"><Input/></FormItem>
                 <FormItem style={{display: 'none'}} name="groupId"><Input/></FormItem>
                 <FormItem label="规格参数" name="name" required={true}><Input/></FormItem>
-                <FormItem label="是否为数值" name="isNumeric"><Radio.Group options={trueOrFalse}/></FormItem>
-                <If when={(values, {globalStatus}) => {
-                    return values.isNumeric === 1;
+                <FormItem label="是否为数值" name="digit"><Radio.Group options={trueOrFalse}/></FormItem>
+                <If when={(values) => {
+                    return values.digit === 1;
                 }}>
-                    <FormItem label="单位" name="unit" help="规格参数的单位"><Input/></FormItem>
+                    <FormItem label="单位" name="unit"><Input/></FormItem>
                 </If>
-                <FormItem label="是否通用" name="isGeneric"><Radio.Group options={trueOrFalse}/></FormItem>
-                <FormItem label="是否用于搜索" name="isSearching"><Radio.Group options={trueOrFalse}/></FormItem>
-                <If when={(values, {globalStatus}) => {
-                    return values.isNumeric === 1 && values.isSearching === 1;
+                <FormItem label="是否通用" name="generic"><Radio.Group options={trueOrFalse}/></FormItem>
+                <FormItem label="是否用于搜索" name="searching"><Radio.Group options={trueOrFalse}/></FormItem>
+                <If when={(values) => {
+                    return values.digit === 1 && values.searching === 1;
                 }}>
-                    <FormItem label="分段间隔" name="segments" help="电池容量:0~2000mAh"><Input/></FormItem>
+                    <FormItem label="分段间隔" name="segments" help={<b>例如,电池容量:0~2000mAh</b>}><Input/></FormItem>
                 </If>
                 <FormItem style={{display: this.state.display}} label="排序" name="sort"
                           defaultMinWidth={false} layout={{label: 8, control: 4}}>

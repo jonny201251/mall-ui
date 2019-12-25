@@ -7,49 +7,49 @@ import styles from '../../common.less'
 import SpecificationParamForm from './SpecificationParamForm'
 import request from '../../../utils/request'
 
-let globalList
-const adminControllerPath = '/mall/complexSpecParam'
+let globalList1, globalList2
 const adminControllerPath1 = '/mall/complexSpecGroup'
-const adminControllerPath2 = '/mall/category'
+const adminControllerPath2 = '/mall/complexSpecParam'
+const adminControllerPath3 = '/mall/category'
 
 class SpecificationParamList extends PureComponent {
     state = {
         treeData: [],
-        selectedRowKeys: [],
-        categoryId: -1
+        selectedRowKeys: []
     }
-    handleOperator = (type) => {
+    handleOperator2 = (type) => {
         if ('create' === type) {
-            Dialog.show({
-                title: '新增',
-                footerAlign: 'label',
-                locale: 'zh',
-                width: 400,
-                enableValidate: true,
-                content: <SpecificationParamForm option={{type, categoryId: this.state.categoryId}}/>,
-                onOk: (values, hide) => {
-                    if (values.categoryId === -1) {
-                        message.warning('请先单击一个商品分类!')
-                        return
+            if (this.state.categoryId && this.state.groupId) {
+                Dialog.show({
+                    title: '新增',
+                    footerAlign: 'label',
+                    locale: 'zh',
+                    width: 400,
+                    enableValidate: true,
+                    content: <SpecificationParamForm
+                        option={{type, categoryId: this.state.categoryId, groupId: this.state.groupId}}/>,
+                    onOk: (values, hide) => {
+                        hide()
+                        request.post(adminControllerPath2 + '/add', {data: {...values}}).then(res => {
+                            if (res && res.code === 1) {
+                                message.success("操作成功")
+                                globalList2.refresh()
+                            } else {
+                                message.error("操作失败")
+                            }
+                        })
                     }
-                    hide()
-                    request.post(adminControllerPath + '/add', {data: {...values}}).then(res => {
-                        if (res && res.code === 1) {
-                            message.success("操作成功")
-                            globalList.refresh()
-                        } else {
-                            message.error("操作失败")
-                        }
-                    })
-                }
-            })
+                })
+            } else {
+                message.warning('请选择-商品类目和规格组')
+            }
         } else if ('edit' === type || 'view' === type) {
             if (this.state.record === undefined) {
                 message.warning('请先单击一条数据!')
                 return
             }
             let title = 'edit' === type ? '编辑' : '浏览'
-            request(adminControllerPath + '/getById?id=' + this.state.record.id).then(res => {
+            request(adminControllerPath2 + '/getById?id=' + this.state.record.id).then(res => {
                 if (res && res.code === 1) {
                     Dialog.show({
                         title: title,
@@ -60,10 +60,10 @@ class SpecificationParamList extends PureComponent {
                         content: <SpecificationParamForm option={{type, record: res.data}}/>,
                         onOk: (values, hide) => {
                             hide()
-                            request.post(adminControllerPath + '/edit', {data: {...values}}).then(res => {
+                            request.post(adminControllerPath2 + '/edit', {data: {...values}}).then(res => {
                                 if (res && res.code === 1) {
                                     message.success("操作成功")
-                                    globalList.refresh()
+                                    globalList2.refresh()
                                 } else {
                                     message.error("操作失败")
                                 }
@@ -88,9 +88,9 @@ class SpecificationParamList extends PureComponent {
                     style={{color: 'red'}}>{this.state.record.name}</span></span>的数据吗?</p>,
                 onOk: (values, hide) => {
                     hide()
-                    request(adminControllerPath + '/delete?id=' + this.state.record.id).then(res => {
+                    request(adminControllerPath2 + '/delete?id=' + this.state.record.id).then(res => {
                         if (res && res.code === 1) {
-                            globalList.refresh()
+                            globalList2.refresh()
                             message.success("删除成功")
                         } else {
                             Modal.error({
@@ -104,22 +104,18 @@ class SpecificationParamList extends PureComponent {
         }
     }
 
-    handleError = (err) => {
-        console.log('err', err);
-    }
-
-    onMount = (list) => {
-        this.list = globalList = list;
-    }
-
     onMount1 = (list1) => {
-        this.list1 = list1;
+        this.list1 = globalList1 = list1;
     }
 
-    clickOperation = (type, record) => {
+    onMount2 = (list2) => {
+        this.list2 = globalList2 = list2;
+    }
+
+    clickOperation2 = (type, record) => {
         this.setState({record})
         if ('onDoubleClick' === type) {
-            this.handleOperator('edit')
+            this.handleOperator2('edit')
         }
     }
 
@@ -135,28 +131,39 @@ class SpecificationParamList extends PureComponent {
     })
 
     componentWillMount() {
-        console.log(window.location)
         //取出 上级类目
-        request.get(adminControllerPath2 + '/tree').then(res => {
+        request.get(adminControllerPath3 + '/tree').then(res => {
             if (res && res.code === 1) {
                 this.setState({treeData: res.data})
             }
         })
     }
 
-    onSelect = (selectedKeys, info) => {
+    onSelect = selectedKeys => {
         if (selectedKeys.length > 0) {
             let categoryId = parseInt(selectedKeys[0])
             this.setState({categoryId})//点击分页时，传递的参数
-            this.list1.setUrl(adminControllerPath1 + '/list/' + categoryId)
+            this.list1.setUrl(adminControllerPath1 + '/list?categoryId=' + categoryId)
             this.list1.refresh()
         } else {
-            this.list1.setUrl(adminControllerPath1 + '/list/-1')
+            this.list1.setUrl(adminControllerPath1 + '/list?categoryId=-1')
             this.list1.refresh()
         }
     }
 
+    onChange = (selectedRowKeys, selectedRows) => {
+        this.setState({selectedRowKeys, groupId: selectedRows[0].id})
+        //请求规格参数
+        this.list2.setUrl(adminControllerPath2 + '/list?categoryId=' + this.state.categoryId + '&groupId=' + selectedRows[0].id)
+        this.list2.refresh()
+    }
+
     render() {
+        let rowSelection = {
+            type: 'radio',
+            selectedRowKeys: this.state.selectedRowKeys,
+            onChange: this.onChange
+        }
         return (
             <div>
                 <Row>
@@ -172,15 +179,9 @@ class SpecificationParamList extends PureComponent {
                         </Tree>
                     </Col>
                     <Col span={19}>
-                        <List url={adminControllerPath1 + '/list/' + this.state.categoryId}
+                        <List url={adminControllerPath1 + '/list?categoryId=' + (this.state.categoryId || -1)}
                               onMount={this.onMount1}>
-                            <Table rowSelection={{
-                                type: 'radio',
-                                selectedRowKeys: this.state.selectedRowKeys,
-                                onChange: (selectedRowKeys, selectedRows) => {
-                                    this.setState({selectedRowKeys, groupRecord: selectedRows[0]})
-                                }
-                            }}>
+                            <Table rowSelection={rowSelection}>
                                 <Table.Column title="规格组" dataIndex="name"/>
                             </Table>
                             <Pagination/>
@@ -194,27 +195,29 @@ class SpecificationParamList extends PureComponent {
                             <Breadcrumb.Item>规格参数</Breadcrumb.Item>
                         </Breadcrumb>
                     </p>
-                    <List url={adminControllerPath + '/list/' + this.state.categoryId} onError={this.handleError}
-                          onMount={this.onMount}>
+                    <List
+                        url={adminControllerPath2 + '/list?categoryId=' + (this.state.categoryId || -1) + '&groupId=' + (this.state.groupId || -1)}
+                        onMount={this.onMount2}>
                         <div className={styles.marginBottom10}>
-                            <Button icon="plus" type="primary" onClick={() => this.handleOperator('create')}>新增</Button>
-                            <Button icon="edit" type="primary" onClick={() => this.handleOperator('edit')}
+                            <Button icon="plus" type="primary"
+                                    onClick={() => this.handleOperator2('create')}>新增</Button>
+                            <Button icon="edit" type="primary" onClick={() => this.handleOperator2('edit')}
                                     className={styles.marginLeft20}>编辑</Button>
-                            <Button icon="search" type="primary" onClick={() => this.handleOperator('view')}
+                            <Button icon="search" type="primary" onClick={() => this.handleOperator2('view')}
                                     className={styles.marginLeft20}>浏览</Button>
-                            <Button icon="delete" type="primary" onClick={() => this.handleOperator('delete')}
+                            <Button icon="delete" type="primary" onClick={() => this.handleOperator2('delete')}
                                     className={styles.marginLeft20}>删除</Button>
                         </div>
                         <Table onRow={record => {
                             return {
-                                onClick: () => this.clickOperation('onClick', record),
-                                onDoubleClick: () => this.clickOperation('onDoubleClick', record)
+                                onClick: () => this.clickOperation2('onClick', record),
+                                onDoubleClick: () => this.clickOperation2('onDoubleClick', record)
                             }
                         }}>
                             <Table.Column title="规格参数" dataIndex="name"/>
-                            <Table.Column title="是否为数值" dataIndex="isNumeric"/>
+                            <Table.Column title="是否为数值" dataIndex="digit" render={val => val === 0 ? '否' : '是'}/>
                             <Table.Column title="单位" dataIndex="unit"/>
-                            <Table.Column title="是否通用" dataIndex="isGeneric"/>
+                            <Table.Column title="是否通用" dataIndex="generic" render={val => val === 0 ? '否' : '是'}/>
                             <Table.Column title="排序" dataIndex="sort"
                                           defaultSortOrder={'ascend'} sorter={(a, b) => a.sort - b.sort}/>
                         </Table>
