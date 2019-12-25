@@ -24,7 +24,7 @@ class Index extends PureComponent {
                 locale: 'zh',
                 width: 400,
                 enableValidate: true,
-                content: <CRUDForm option={{type}}/>,
+                content: <CRUDForm option={{type, categoryId: this.state.categoryId}}/>,
                 onOk: (values, hide) => {
                     hide()
                     request.post(adminControllerPath + '/add', {data: {...values}}).then(res => {
@@ -166,7 +166,7 @@ class Index extends PureComponent {
                                 onDoubleClick: () => this.clickOperation('onDoubleClick', record)
                             }
                         }}>
-                            <Table.Column title="参数组名称" dataIndex="name"/>
+                            <Table.Column title="规格组" dataIndex="name"/>
                             <Table.Column title="排序" dataIndex="sort"
                                           defaultSortOrder={'ascend'} sorter={(a, b) => a.sort - b.sort}/>
                         </Table>

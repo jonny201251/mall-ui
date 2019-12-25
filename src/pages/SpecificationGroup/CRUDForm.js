@@ -21,8 +21,10 @@ class CRUDForm extends PureComponent {
     }
 
     componentWillMount() {
-        let {type, record} = this.props.option
-        if ('edit' === type || 'view' === type) {
+        let {type, record, categoryId} = this.props.option
+        if ('create' === type && categoryId > 0) {
+            this.core.setValues({categoryId})
+        } else if ('edit' === type || 'view' === type) {
             this.core.setValues({...record})
             this.core.setGlobalStatus('edit' === type ? type : 'preview')
             //显示出 排序
@@ -40,7 +42,7 @@ class CRUDForm extends PureComponent {
         return (
             <Form core={this.core} layout={{label: 8, control: 16}}>
                 <FormItem style={{display: 'none'}} name="id"><Input/></FormItem>
-                <FormItem label="参数组名称" name="name" required={true}><Input/></FormItem>
+                <FormItem label="规格组" name="name" required={true}><Input/></FormItem>
                 <FormItem label="商品类目" name="categoryId" required={true}>
                     <TreeSelect treeData={this.state.treeSelectData} treeDefaultExpandAll/>
                 </FormItem>

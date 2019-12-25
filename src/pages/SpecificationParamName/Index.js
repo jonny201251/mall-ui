@@ -25,8 +25,12 @@ class Index extends PureComponent {
                 locale: 'zh',
                 width: 400,
                 enableValidate: true,
-                content: <CRUDForm option={{type}}/>,
+                content: <CRUDForm option={{type, categoryId: this.state.categoryId}}/>,
                 onOk: (values, hide) => {
+                    if (values.categoryId === -1) {
+                        message.warning('请先单击一个商品分类!')
+                        return
+                    }
                     hide()
                     request.post(adminControllerPath + '/add', {data: {...values}}).then(res => {
                         if (res && res.code === 1) {
@@ -140,10 +144,15 @@ class Index extends PureComponent {
     }
 
     onSelect = (selectedKeys, info) => {
-        let categoryId = parseInt(selectedKeys[0])
-        this.setState({categoryId})//点击分页时，传递的参数
-        this.list1.setUrl(adminControllerPath1 + '/list/' + categoryId)
-        this.list1.refresh()
+        if (selectedKeys.length > 0) {
+            let categoryId = parseInt(selectedKeys[0])
+            this.setState({categoryId})//点击分页时，传递的参数
+            this.list1.setUrl(adminControllerPath1 + '/list/' + categoryId)
+            this.list1.refresh()
+        } else {
+            this.list1.setUrl(adminControllerPath1 + '/list/-1')
+            this.list1.refresh()
+        }
     }
 
     render() {
@@ -152,8 +161,8 @@ class Index extends PureComponent {
                 <Row>
                     <p>
                         <Breadcrumb style={{fontSize: 18}}>
-                            <Breadcrumb.Item>商品分类</Breadcrumb.Item>
-                            <Breadcrumb.Item>规格参数组</Breadcrumb.Item>
+                            <Breadcrumb.Item>商品类目</Breadcrumb.Item>
+                            <Breadcrumb.Item>规格组</Breadcrumb.Item>
                         </Breadcrumb>
                     </p>
                     <Col span={5}>
@@ -169,7 +178,7 @@ class Index extends PureComponent {
                                     onClick: () => this.clickOperation('onClick', record),
                                 }
                             }}>
-                                <Table.Column title="参数组名称" dataIndex="name"/>
+                                <Table.Column title="规格组" dataIndex="name"/>
                             </Table>
                             <Pagination/>
                         </List>
@@ -178,7 +187,7 @@ class Index extends PureComponent {
                 <Row>
                     <p>
                         <Breadcrumb style={{fontSize: 18}}>
-                            <Breadcrumb.Item>规格参数组</Breadcrumb.Item>
+                            <Breadcrumb.Item>规格组</Breadcrumb.Item>
                             <Breadcrumb.Item>规格参数</Breadcrumb.Item>
                         </Breadcrumb>
                     </p>
@@ -199,7 +208,7 @@ class Index extends PureComponent {
                                 onDoubleClick: () => this.clickOperation('onDoubleClick', record)
                             }
                         }}>
-                            <Table.Column title="参数名称" dataIndex="name"/>
+                            <Table.Column title="规格参数" dataIndex="name"/>
                             <Table.Column title="是否为数值" dataIndex="isNumeric"/>
                             <Table.Column title="单位" dataIndex="unit"/>
                             <Table.Column title="是否通用" dataIndex="isGeneric"/>

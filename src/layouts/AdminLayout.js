@@ -32,8 +32,8 @@ class AdminLayout extends React.Component {
                             >
                                 <Menu.Item key="3"><Link to="/category/index">商品类目</Link></Menu.Item>
                                 <Menu.Item key="4"><Link to="/brand/index">品牌管理</Link></Menu.Item>
-                                <Menu.Item key="5"><Link to="/specificationGroup/index">规格参数组</Link></Menu.Item>
-                                <Menu.Item key="6"><Link to="/specificationParamName/index">规格参数名称</Link></Menu.Item>
+                                <Menu.Item key="5"><Link to="/specificationGroup/index">规格组</Link></Menu.Item>
+                                <Menu.Item key="6"><Link to="/specificationParamName/index">规格参数</Link></Menu.Item>
                                 <Menu.Item key="7"><Link to="/item/index">商品列表</Link></Menu.Item>
                             </SubMenu>
                         </Menu>
