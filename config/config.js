@@ -24,8 +24,8 @@ export default {
                 {path: '/', redirect: '/categoryList'},
                 {path: '/categoryList', component: './Category/CategoryList'},
                 {path: '/brandList', component: './Brand/BrandList'},
-                {path: '/complexSpecificationGroupList', component: './ComplexSpecification/SpecificationGroup/SpecificationGroupList'},
-                {path: '/complexSpecificationParamNameList', component: './ComplexSpecification/SpecificationParamName/SpecificationParamList'},
+                {path: '/complexSpecGroupList', component: './ComplexSpecification/SpecificationGroup/SpecificationGroupList'},
+                {path: '/complexSpecParamNameList', component: './ComplexSpecification/SpecificationParamName/SpecificationParamList'},
                 {path: '/itemList', component: './Item/ItemList'},
             ]
         }
