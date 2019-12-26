@@ -26,6 +26,7 @@ export default {
                 {path: '/brandList', component: './Brand/BrandList'},
                 {path: '/complexSpecGroupList', component: './ComplexSpecification/SpecificationGroup/SpecificationGroupList'},
                 {path: '/complexSpecParamList', component: './ComplexSpecification/SpecificationParam/SpecificationParamList'},
+                {path: '/easySpecParamList', component: './EasySpecification/EasySpecParamList'},
                 {path: '/itemList', component: './Item/ItemList'},
             ]
         }
