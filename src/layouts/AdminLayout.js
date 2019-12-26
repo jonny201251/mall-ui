@@ -42,7 +42,7 @@ class AdminLayout extends React.Component {
                             </SubMenu>
                             <SubMenu
                                 key="sub2"
-                                title={<span>规格管理</span>}
+                                title={<span><Icon type="tool"/><span>规格参数</span></span>}
                             >
                                 <SubMenu
                                     key="sub3"

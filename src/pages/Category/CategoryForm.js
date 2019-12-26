@@ -12,7 +12,7 @@ const statusOption = [
 ]
 
 const templateOption = [
-    {label: '无规格', value: 0},
+    {label: '用户自定义', value: 0},
     {label: '复杂规格', value: 1},
     {label: '简单规格', value: 2}
 ]

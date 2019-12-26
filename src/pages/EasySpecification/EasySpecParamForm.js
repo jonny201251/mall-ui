@@ -24,7 +24,7 @@ class EasySpecParamForm extends PureComponent {
     }
 
     componentWillMount() {
-        this.core.setValues({digit: 0, generic: 1, searching: 0})
+        this.core.setValues({digit: 0,  searching: 0})
 
         let {type, record, categoryId} = this.props.option
         if ('create' === type) {
@@ -55,7 +55,6 @@ class EasySpecParamForm extends PureComponent {
                 }}>
                     <FormItem label="单位" name="unit"><Input/></FormItem>
                 </If>
-                <FormItem label="是否通用" name="generic"><Radio.Group options={trueOrFalse}/></FormItem>
                 <FormItem label="是否用于搜索" name="searching"><Radio.Group options={trueOrFalse}/></FormItem>
                 <If when={(values) => {
                     return values.digit === 1 && values.searching === 1;

@@ -8,7 +8,7 @@ import EasySpecParamForm from './EasySpecParamForm'
 import request from '../../utils/request'
 
 let globalList
-const adminControllerPath = '/mall/complexSpecParam'
+const adminControllerPath = '/mall/easySpecParam'
 const adminControllerPath2 = '/mall/category'
 
 class SpecificationParamList extends PureComponent {
@@ -18,30 +18,40 @@ class SpecificationParamList extends PureComponent {
     }
     handleOperator = (type) => {
         if ('create' === type) {
-            if (this.state.categoryId && this.state.groupId) {
-                Dialog.show({
-                    title: '新增',
-                    footerAlign: 'label',
-                    locale: 'zh',
-                    width: 400,
-                    enableValidate: true,
-                    content: <EasySpecParamForm
-                        option={{type, categoryId: this.state.categoryId, groupId: this.state.groupId}}/>,
-                    onOk: (values, hide) => {
-                        hide()
-                        request.post(adminControllerPath + '/add', {data: {...values}}).then(res => {
-                            if (res && res.code === 1) {
-                                message.success("操作成功")
-                                globalList.refresh()
-                            } else {
-                                message.error("操作失败")
+            if (this.state.categoryId === undefined) {
+                message.warning('请选择-商品类目')
+                return
+            }
+            //查看该商品类目的规格模板
+            request(adminControllerPath2 + '/getById?id=' + this.state.categoryId).then(res => {
+                if (res && res.code === 1) {
+                    if (res.data.template === 2) {
+                        Dialog.show({
+                            title: '新增',
+                            footerAlign: 'label',
+                            locale: 'zh',
+                            width: 400,
+                            enableValidate: true,
+                            content: <EasySpecParamForm option={{type, categoryId: this.state.categoryId}}/>,
+                            onOk: (values, hide) => {
+                                hide()
+                                request.post(adminControllerPath + '/add', {data: {...values}}).then(res => {
+                                    if (res && res.code === 1) {
+                                        message.success("操作成功")
+                                        globalList.refresh()
+                                    } else {
+                                        message.error("操作失败")
+                                    }
+                                })
                             }
                         })
+                    } else {
+                        message.warning('该商品类目已对应-[用户自定义、复杂规格]模板')
                     }
-                })
-            } else {
-                message.warning('请选择-商品类目')
-            }
+                } else {
+                    message.error("操作失败")
+                }
+            })
         } else if ('edit' === type || 'view' === type) {
             if (this.state.record === undefined) {
                 message.warning('请先单击一条数据!')
@@ -83,7 +93,7 @@ class SpecificationParamList extends PureComponent {
                 footerAlign: 'label',
                 locale: 'zh',
                 width: 400,
-                content: <p>确定要删除<span style={{fontWeight: 'bold'}}>参数组名称=<span
+                content: <p>确定要删除<span style={{fontWeight: 'bold'}}>规格参数=<span
                     style={{color: 'red'}}>{this.state.record.name}</span></span>的数据吗?</p>,
                 onOk: (values, hide) => {
                     hide()
@@ -104,8 +114,8 @@ class SpecificationParamList extends PureComponent {
     }
 
 
-    onMount = (list2) => {
-        this.list2 = globalList = list2;
+    onMount = (list) => {
+        this.list = globalList = list;
     }
 
     clickOperation = (type, record) => {
@@ -139,19 +149,12 @@ class SpecificationParamList extends PureComponent {
         if (selectedKeys.length > 0) {
             let categoryId = parseInt(selectedKeys[0])
             this.setState({categoryId})//点击分页时，传递的参数
-            this.list1.setUrl(adminControllerPath + '/list?categoryId=' + categoryId)
-            this.list1.refresh()
+            this.list.setUrl(adminControllerPath + '/list?categoryId=' + categoryId)
+            this.list.refresh()
         } else {
-            this.list1.setUrl(adminControllerPath + '/list?categoryId=-1')
-            this.list1.refresh()
+            this.list.setUrl(adminControllerPath + '/list?categoryId=-1')
+            this.list.refresh()
         }
-    }
-
-    onChange = (selectedRowKeys, selectedRows) => {
-        this.setState({selectedRowKeys, groupId: selectedRows[0].id})
-        //请求规格参数
-        this.list2.setUrl(adminControllerPath + '/list?categoryId=' + this.state.categoryId + '&groupId=' + selectedRows[0].id)
-        this.list2.refresh()
     }
 
     render() {
@@ -171,7 +174,7 @@ class SpecificationParamList extends PureComponent {
                     </Col>
                     <Col span={19}>
                         <List
-                            url={adminControllerPath + '/list?categoryId=' + (this.state.categoryId || -1) + '&groupId=' + (this.state.groupId || -1)}
+                            url={adminControllerPath + '/list?categoryId=' + (this.state.categoryId || -1)}
                             onMount={this.onMount}>
                             <div className={styles.marginBottom10}>
                                 <Button icon="plus" type="primary"
@@ -192,7 +195,6 @@ class SpecificationParamList extends PureComponent {
                                 <Table.Column title="规格参数" dataIndex="name"/>
                                 <Table.Column title="是否为数值" dataIndex="digit" render={val => val === 0 ? '否' : '是'}/>
                                 <Table.Column title="单位" dataIndex="unit"/>
-                                <Table.Column title="是否通用" dataIndex="generic" render={val => val === 0 ? '否' : '是'}/>
                                 <Table.Column title="排序" dataIndex="sort"
                                               defaultSortOrder={'ascend'} sorter={(a, b) => a.sort - b.sort}/>
                             </Table>
