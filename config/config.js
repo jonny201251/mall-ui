@@ -31,9 +31,9 @@ export default {
             ]
         }
     ],
-/*        theme:{
+        theme:{
             "primary-color": "#1DA57A"
-        },*/
+        },
     proxy: {
         '/mall': {
             target: 'http://localhost:8082',
