@@ -135,7 +135,6 @@ class CategoryList extends PureComponent {
                 }}>
                     <Table.Column title="类目名称" dataIndex="name"/>
                     <Table.Column title="规格模板" dataIndex="template" render={val => val === 0 ? '简单规格' : '复杂规格'}/>
-                    <Table.Column title="备注" dataIndex="comment"/>
                     <Table.Column title="排序" dataIndex="sort"
                                   defaultSortOrder={'ascend'} sorter={(a, b) => a.sort - b.sort}/>
                 </Table>

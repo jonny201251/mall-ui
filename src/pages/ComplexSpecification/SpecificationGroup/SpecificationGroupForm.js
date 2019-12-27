@@ -22,6 +22,8 @@ class SpecificationGroupForm extends PureComponent {
 
     componentWillMount() {
         let {type, record, categoryId} = this.props.option
+
+        this.core.setStatus('categoryId','disabled')
         if ('create' === type && categoryId > 0) {
             this.core.setValues({categoryId})
         } else if ('edit' === type || 'view' === type) {

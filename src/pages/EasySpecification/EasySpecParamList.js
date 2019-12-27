@@ -25,7 +25,7 @@ class SpecificationParamList extends PureComponent {
             //查看该商品类目的规格模板
             request(adminControllerPath2 + '/getById?id=' + this.state.categoryId).then(res => {
                 if (res && res.code === 1) {
-                    if (res.data.template === 2) {
+                    if (res.data.template === 0) {
                         Dialog.show({
                             title: '新增',
                             footerAlign: 'label',
@@ -46,7 +46,7 @@ class SpecificationParamList extends PureComponent {
                             }
                         })
                     } else {
-                        message.warning('该商品类目已对应-[用户自定义、复杂规格]模板')
+                        message.warning('该商品类目已经绑定了-复杂规格模板')
                     }
                 } else {
                     message.error("操作失败")

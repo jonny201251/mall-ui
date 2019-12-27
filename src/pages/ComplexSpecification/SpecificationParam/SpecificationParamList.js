@@ -140,6 +140,7 @@ class SpecificationParamList extends PureComponent {
     }
 
     onSelect = selectedKeys => {
+        //请求 规格组
         if (selectedKeys.length > 0) {
             let categoryId = parseInt(selectedKeys[0])
             this.setState({categoryId})//点击分页时，传递的参数
@@ -149,6 +150,11 @@ class SpecificationParamList extends PureComponent {
             this.list1.setUrl(adminControllerPath1 + '/list?categoryId=-1')
             this.list1.refresh()
         }
+        //清空 选中的规格组
+        this.setState({selectedRowKeys: []})
+        //清空 规格参数
+        this.list2.setUrl(adminControllerPath2 + '/list?categoryId=-1&groupId=-1')
+        this.list2.refresh()
     }
 
     onChange = (selectedRowKeys, selectedRows) => {

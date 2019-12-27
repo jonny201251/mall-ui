@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react'
-import {Col, message, Modal, Row, Tree} from 'antd'
+import {Col, message, Modal, Row, Tree, Breadcrumb} from 'antd'
 import List, {Pagination, Table} from 'nolist/lib/wrapper/antd'
 import {Button, Dialog} from 'nowrapper/lib/antd'
 
@@ -7,6 +7,7 @@ import styles from '../../common.less'
 
 import SpecificationGroupForm from './SpecificationGroupForm'
 import request from '../../../utils/request'
+import EasySpecParamForm from "../../EasySpecification/EasySpecParamForm";
 
 let globalList
 const adminControllerPath = '/mall/complexSpecGroup'
@@ -14,28 +15,42 @@ const adminControllerPath2 = '/mall/category'
 
 class SpecificationGroupList extends PureComponent {
     state = {
-        treeData: [],
-        categoryId: -1
+        treeData: []
     }
     handleOperator = (type) => {
         if ('create' === type) {
-            Dialog.show({
-                title: '新增',
-                footerAlign: 'label',
-                locale: 'zh',
-                width: 400,
-                enableValidate: true,
-                content: <SpecificationGroupForm option={{type, categoryId: this.state.categoryId}}/>,
-                onOk: (values, hide) => {
-                    hide()
-                    request.post(adminControllerPath + '/add', {data: {...values}}).then(res => {
-                        if (res && res.code === 1) {
-                            message.success("操作成功")
-                            globalList.refresh()
-                        } else {
-                            message.error("操作失败")
-                        }
-                    })
+            if (this.state.categoryId === undefined) {
+                message.warning('请选择-商品类目')
+                return
+            }
+            //查看该商品类目的规格模板
+            request(adminControllerPath2 + '/getById?id=' + this.state.categoryId).then(res => {
+                if (res && res.code === 1) {
+                    if (res.data.template === 1) {
+                        Dialog.show({
+                            title: '新增',
+                            footerAlign: 'label',
+                            locale: 'zh',
+                            width: 400,
+                            enableValidate: true,
+                            content: <SpecificationGroupForm option={{type, categoryId: this.state.categoryId}}/>,
+                            onOk: (values, hide) => {
+                                hide()
+                                request.post(adminControllerPath + '/add', {data: {...values}}).then(res => {
+                                    if (res && res.code === 1) {
+                                        message.success("操作成功")
+                                        globalList.refresh()
+                                    } else {
+                                        message.error("操作失败")
+                                    }
+                                })
+                            }
+                        })
+                    } else {
+                        message.warning('该商品类目已经绑定了-简单规格模板')
+                    }
+                } else {
+                    message.error("操作失败")
                 }
             })
         } else if ('edit' === type || 'view' === type) {
@@ -135,22 +150,34 @@ class SpecificationGroupList extends PureComponent {
     }
 
     onSelect = selectedKeys => {
-        let categoryId = parseInt(selectedKeys[0])
-        this.setState({categoryId})//点击分页时，传递的参数
-        this.list.setUrl(adminControllerPath + '/list?categoryId=' + categoryId)
-        this.list.refresh()
+        if (selectedKeys.length > 0) {
+            let categoryId = parseInt(selectedKeys[0])
+            this.setState({categoryId})//点击分页时，传递的参数
+            this.list.setUrl(adminControllerPath + '/list?categoryId=' + categoryId)
+            this.list.refresh()
+        } else {
+            this.list.setUrl(adminControllerPath + '/list?categoryId=-1')
+            this.list.refresh()
+        }
     }
 
     render() {
         return (
             <Row>
+                <p>
+                    <Breadcrumb style={{fontSize: 18}}>
+                        <Breadcrumb.Item>商品类目</Breadcrumb.Item>
+                        <Breadcrumb.Item>规格组</Breadcrumb.Item>
+                    </Breadcrumb>
+                </p>
                 <Col span={5}>
                     <Tree onSelect={this.onSelect} showLine>
                         {this.renderTreeNodes(this.state.treeData)}
                     </Tree>
                 </Col>
                 <Col span={19}>
-                    <List url={adminControllerPath + '/list?category=' + (this.state.categoryId || -1)} onError={this.handleError}
+                    <List url={adminControllerPath + '/list?category=' + (this.state.categoryId || -1)}
+                          onError={this.handleError}
                           onMount={this.onMount}>
                         <div className={styles.marginBottom10}>
                             <Button icon="plus" type="primary" onClick={() => this.handleOperator('create')}>新增</Button>
