@@ -1,6 +1,9 @@
 export default {
     /*    base: "/mall/",//前端路由的前缀
         publicPath: "/mall/",//css、img等资源的前缀*/
+    targets: {
+        ie: 11
+    },
     plugins: [
         ['umi-plugin-react', {
             antd: true,
@@ -28,6 +31,7 @@ export default {
                 {path: '/complexSpecParamList', component: './ComplexSpecification/SpecificationParam/SpecificationParamList'},
                 {path: '/easySpecParamList', component: './EasySpecification/EasySpecParamList'},
                 {path: '/itemList', component: './Item/ItemList'},
+                {path: '/ImageRichText', component: './ImageRichText/ImageRichText'},
             ]
         }
     ],

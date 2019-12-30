@@ -8,7 +8,8 @@
     "umi-plugin-react": "^1.14.8"
   },
   "dependencies": {
-    "braft-editor": "^2.3.7",
+    "braft-editor": "^2.3.8",
+    "braft-utils": "^3.0.12",
     "classnames": "^2.2.6",
     "echarts": "^4.5.0",
     "echarts-for-react": "^2.0.15-beta.1",
