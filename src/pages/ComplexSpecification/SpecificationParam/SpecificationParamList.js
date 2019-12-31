@@ -8,9 +8,9 @@ import SpecificationParamForm from './SpecificationParamForm'
 import request from '../../../utils/request'
 
 let globalList1, globalList2
-const adminControllerPath1 = '/mall/complexSpecGroup'
-const adminControllerPath2 = '/mall/complexSpecParam'
-const adminControllerPath3 = '/mall/category'
+const complexSpecGroupPath = '/mall/complexSpecGroup'
+const complexSpecParamPath = '/mall/complexSpecParam'
+const categoryPath = '/mall/category'
 
 class SpecificationParamList extends PureComponent {
     state = {
@@ -30,7 +30,7 @@ class SpecificationParamList extends PureComponent {
                         option={{type, categoryId: this.state.categoryId, groupId: this.state.groupId}}/>,
                     onOk: (values, hide) => {
                         hide()
-                        request.post(adminControllerPath2 + '/add', {data: {...values}}).then(res => {
+                        request.post(complexSpecParamPath + '/add', {data: {...values}}).then(res => {
                             if (res && res.code === 1) {
                                 message.success("操作成功")
                                 globalList2.refresh()
@@ -49,7 +49,7 @@ class SpecificationParamList extends PureComponent {
                 return
             }
             let title = 'edit' === type ? '编辑' : '浏览'
-            request(adminControllerPath2 + '/getById?id=' + this.state.record.id).then(res => {
+            request(complexSpecParamPath + '/getById?id=' + this.state.record.id).then(res => {
                 if (res && res.code === 1) {
                     Dialog.show({
                         title: title,
@@ -60,7 +60,7 @@ class SpecificationParamList extends PureComponent {
                         content: <SpecificationParamForm option={{type, record: res.data}}/>,
                         onOk: (values, hide) => {
                             hide()
-                            request.post(adminControllerPath2 + '/edit', {data: {...values}}).then(res => {
+                            request.post(complexSpecParamPath + '/edit', {data: {...values}}).then(res => {
                                 if (res && res.code === 1) {
                                     message.success("操作成功")
                                     globalList2.refresh()
@@ -88,7 +88,7 @@ class SpecificationParamList extends PureComponent {
                     style={{color: 'red'}}>{this.state.record.name}</span></span>的数据吗?</p>,
                 onOk: (values, hide) => {
                     hide()
-                    request(adminControllerPath2 + '/delete?id=' + this.state.record.id).then(res => {
+                    request(complexSpecParamPath + '/delete?id=' + this.state.record.id).then(res => {
                         if (res && res.code === 1) {
                             globalList2.refresh()
                             message.success("删除成功")
@@ -132,7 +132,7 @@ class SpecificationParamList extends PureComponent {
 
     componentWillMount() {
         //取出 上级类目
-        request.get(adminControllerPath3 + '/tree').then(res => {
+        request.get(categoryPath + '/tree').then(res => {
             if (res && res.code === 1) {
                 this.setState({treeData: res.data})
             }
@@ -144,23 +144,23 @@ class SpecificationParamList extends PureComponent {
         if (selectedKeys.length > 0) {
             let categoryId = parseInt(selectedKeys[0])
             this.setState({categoryId})//点击分页时，传递的参数
-            this.list1.setUrl(adminControllerPath1 + '/list?categoryId=' + categoryId)
+            this.list1.setUrl(complexSpecGroupPath + '/list?categoryId=' + categoryId)
             this.list1.refresh()
         } else {
-            this.list1.setUrl(adminControllerPath1 + '/list?categoryId=-1')
+            this.list1.setUrl(complexSpecGroupPath + '/list?categoryId=-1')
             this.list1.refresh()
         }
         //清空 选中的规格组
         this.setState({selectedRowKeys: []})
         //清空 规格参数
-        this.list2.setUrl(adminControllerPath2 + '/list?categoryId=-1&groupId=-1')
+        this.list2.setUrl(complexSpecParamPath + '/list?categoryId=-1&groupId=-1')
         this.list2.refresh()
     }
 
     onChange = (selectedRowKeys, selectedRows) => {
         this.setState({selectedRowKeys, groupId: selectedRows[0].id})
         //请求规格参数
-        this.list2.setUrl(adminControllerPath2 + '/list?categoryId=' + this.state.categoryId + '&groupId=' + selectedRows[0].id)
+        this.list2.setUrl(complexSpecParamPath + '/list?categoryId=' + this.state.categoryId + '&groupId=' + selectedRows[0].id)
         this.list2.refresh()
     }
 
@@ -185,7 +185,7 @@ class SpecificationParamList extends PureComponent {
                         </Tree>
                     </Col>
                     <Col span={19}>
-                        <List url={adminControllerPath1 + '/list?categoryId=' + (this.state.categoryId || -1)}
+                        <List url={complexSpecGroupPath + '/list?categoryId=' + (this.state.categoryId || -1)}
                               onMount={this.onMount1}>
                             <Table rowSelection={rowSelection}>
                                 <Table.Column title="规格组" dataIndex="name"/>
@@ -202,7 +202,7 @@ class SpecificationParamList extends PureComponent {
                         </Breadcrumb>
                     </p>
                     <List
-                        url={adminControllerPath2 + '/list?categoryId=' + (this.state.categoryId || -1) + '&groupId=' + (this.state.groupId || -1)}
+                        url={complexSpecParamPath + '/list?categoryId=' + (this.state.categoryId || -1) + '&groupId=' + (this.state.groupId || -1)}
                         onMount={this.onMount2}>
                         <div className={styles.marginBottom10}>
                             <Button icon="plus" type="primary"

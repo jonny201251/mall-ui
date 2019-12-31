@@ -11,7 +11,7 @@ import request from '../../utils/request'
 
 let globalList
 const adminContextPath = '/mall'
-const adminControllerPath = '/mall/brand'
+const brandPath = '/mall/brand'
 
 
 class BrandList extends PureComponent {
@@ -58,7 +58,7 @@ class BrandList extends PureComponent {
                     //将表单数据放入formData
                     formData.append("form", JSON.stringify(values))
                     //异步请求
-                    request.post(adminControllerPath + '/add', {data: formData}).then(res => {
+                    request.post(brandPath + '/add', {data: formData}).then(res => {
                         if (res && res.code === 1) {
                             message.success("操作成功")
                             modal.destroy()
@@ -75,7 +75,7 @@ class BrandList extends PureComponent {
                 return
             }
             let title = 'edit' === type ? '编辑' : '浏览'
-            request(adminControllerPath + '/getById?id=' + this.state.record.id).then(res => {
+            request(brandPath + '/getById?id=' + this.state.record.id).then(res => {
                 if (res && res.code === 1) {
                     Dialog.show({
                         title: title,
@@ -100,7 +100,7 @@ class BrandList extends PureComponent {
                             //将表单数据放入formData
                             formData.append("form", JSON.stringify(values))
                             //异步请求
-                            request.post(adminControllerPath + '/edit', {data: formData}).then(res => {
+                            request.post(brandPath + '/edit', {data: formData}).then(res => {
                                 if (res && res.code === 1) {
                                     message.success("操作成功")
                                     modal.destroy()
@@ -128,7 +128,7 @@ class BrandList extends PureComponent {
                 content: <p>确定要删除<span style={{fontWeight: 'bold'}}>类目名称=<span
                     style={{color: 'red'}}>{this.state.record.name}</span></span>的数据吗?</p>,
                 onOk: (values, hide) => {
-                    request(adminControllerPath + '/delete?id=' + this.state.record.id).then(res => {
+                    request(brandPath + '/delete?id=' + this.state.record.id).then(res => {
                         hide()
                         if (res && res.code === 1) {
                             globalList.refresh()
@@ -162,7 +162,7 @@ class BrandList extends PureComponent {
 
     render() {
         return (
-            <List url={adminControllerPath + '/list'} onError={this.handleError} onMount={this.onMount}>
+            <List url={brandPath + '/list'} onError={this.handleError} onMount={this.onMount}>
                 <Filter cols={5}>
                     <Filter.Item label="username" name="username"><Input/></Filter.Item>
                     <Filter.Item label="age" name="age"><Input/></Filter.Item>

@@ -1,78 +1,81 @@
 import React, {PureComponent} from 'react'
-import {Button, message, Steps} from 'antd'
-import stepStyles from './step.less'
-import Form1 from '../Form1/Form1'
+import {Button, message, Steps, Breadcrumb, Card} from 'antd'
+import Form, {FormCore, FormItem} from 'noform'
+import {Input, Radio, TreeSelect, Select} from 'nowrapper/lib/antd'
+import request from '../../../utils/request'
 
-const {Step} = Steps
+
+const validate = {
+    name: {type: "number", required: true, message: '类目名称不能为空'}
+}
+
+const categoryPath = '/mall/category'
+const spuPath = '/mall/spu'
 export default class ItemAdd extends PureComponent {
     state = {
-        current: 0
+        treeSelectData: [],
     }
 
-    next() {
-        if (this.state.current === 0) {
-            console.log(this.Form1.core);
-            this.Form1.core.validate((err) => {
-                console.log(err)
-            })
-            return
-        } else if (this.state.current === 1) {
-
-        }
-        const current = this.state.current + 1;
-        this.setState({current});
+    constructor(props) {
+        super(props);
+        this.core = new FormCore({validateConfig: validate});
     }
 
-    prev() {
-        const current = this.state.current - 1;
-        this.setState({current});
+    componentWillMount() {
+        //取出 商品类目
+        request.get(categoryPath + '/treeSelect').then(res => {
+            if (res && res.code === 1) {
+                this.setState({treeSelectData: res.data})
+            }
+        })
     }
 
-    onRef = (ref) => {
-        this.Form1 = ref
+    showCategoryNames = () => {
+        return this.state.categoryNames.map((name) => <Breadcrumb.Item>{name}</Breadcrumb.Item>)
+    }
+
+    onSelect = (value, node, extra) => {
+        let categoryId = value
+        this.setState({categoryId})
+        // let title = node.props.title
+        //根据categoryId获取所有父级节点的名称
+        request.get(categoryPath + '/categoryNames?categoryId=' + categoryId).then(res => {
+            if (res && res.code === 1) {
+                this.setState({categoryNames: res.data})
+            }
+        })
+        //根据categoryId获取商品类目，从而判断出显示哪个商品规格
+        request.get(spuPath + '/specType?categoryId=' + categoryId).then(res => {
+            if (res && res.code === 1) {
+                this.setState({specType: res.data})
+            }
+        })
+    }
+
+    showSpec = () => {
+
     }
 
     render() {
-        let steps = [
-            {
-                title: '商品类目',
-                content: <Form1 onRef={this.onRef}/>,
-            },
-            {
-                title: '商品信息',
-                content: 'Second-content',
-            },
-            {
-                title: '具体的商品',
-                content: 'Last-content',
-            },
-        ]
-        const {current} = this.state;
         return (
             <div>
-                <Steps current={current}>
-                    {steps.map(item => (
-                        <Step key={item.title} title={item.title}/>
-                    ))}
-                </Steps>
-                <div className={stepStyles.stepsContent}>{steps[current].content}</div>
-                <div className={stepStyles.stepsAction}>
-                    {current > 0 && (
-                        <Button style={{marginRight: 8}} onClick={() => this.prev()}>
-                            上一步
-                        </Button>
-                    )}
-                    {current < steps.length - 1 && (
-                        <Button type="primary" onClick={() => this.next()}>
-                            下一步
-                        </Button>
-                    )}
-                    {current === steps.length - 1 && (
-                        <Button type="primary" onClick={() => message.success('Processing complete!')}>
-                            发布
-                        </Button>
-                    )}
-                </div>
+                <Form core={this.core}>
+                    <FormItem style={{display: 'none'}} name="id"><Input/></FormItem>
+                    <Card title='1.请选择商品类目'>
+                        <FormItem name="categoryId">
+                            <TreeSelect size={'large'} treeData={this.state.treeSelectData} treeDefaultExpandAll
+                                        onSelect={(value, node, extra,) => this.onSelect(value, node, extra)}/>
+                        </FormItem>
+                        <div style={{marginTop: 20}}>
+                            <Breadcrumb style={{fontSize: 18}} separator=">">
+                                {this.state.categoryNames ? this.showCategoryNames() : ''}
+                            </Breadcrumb>
+                        </div>
+                    </Card>
+                    <Card title='2.填写商品信息' style={{marginTop: 20}}>
+                        <FormItem label="商品标题" name="title" required={true}><Input/></FormItem>
+                    </Card>
+                </Form>
             </div>
         )
     }

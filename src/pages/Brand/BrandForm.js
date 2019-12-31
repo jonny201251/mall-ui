@@ -8,8 +8,8 @@ import styles from './upload.less'
 const validate = {
     name: {type: "string", required: true, message: '品牌名称不能为空'}
 }
-const adminControllerPath = '/mall/category'
-const adminPath = 'http://localhost:8082/mall'
+const categoryPath = '/mall/category'
+const hostPath = 'http://localhost:8082/mall'
 
 class BrandForm extends PureComponent {
     state = {
@@ -44,14 +44,14 @@ class BrandForm extends PureComponent {
                     uid: 1,
                     name: (record.image.split('/'))[3],
                     status: 'done',
-                    url: adminPath + record.image
+                    url: hostPath + record.image
                 }]
             })
         } else {
             this.core.setValues({categoryArr: []})
         }
         //取出 商品类目
-        request.get(adminControllerPath + '/treeSelect').then(res => {
+        request.get(categoryPath + '/treeSelect').then(res => {
             if (res && res.code === 1) {
                 this.setState({treeSelectData: res.data})
             }

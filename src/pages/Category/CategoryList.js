@@ -10,7 +10,7 @@ import CategoryForm from './CategoryForm'
 import request from '../../utils/request'
 
 let globalList
-const adminControllerPath = '/mall/category'
+const categoryPath = '/mall/category'
 
 class CategoryList extends PureComponent {
     state = {}
@@ -25,7 +25,7 @@ class CategoryList extends PureComponent {
                 content: <CategoryForm option={{type}}/>,
                 onOk: (values, hide) => {
                     hide()
-                    request.post(adminControllerPath + '/add', {data: {...values}}).then(res => {
+                    request.post(categoryPath + '/add', {data: {...values}}).then(res => {
                         if (res && res.code === 1) {
                             message.success("操作成功")
                             globalList.refresh()
@@ -41,7 +41,7 @@ class CategoryList extends PureComponent {
                 return
             }
             let title = 'edit' === type ? '编辑' : '浏览'
-            request(adminControllerPath + '/getById?id=' + this.state.record.id).then(res => {
+            request(categoryPath + '/getById?id=' + this.state.record.id).then(res => {
                 if (res && res.code === 1) {
                     Dialog.show({
                         title: title,
@@ -52,7 +52,7 @@ class CategoryList extends PureComponent {
                         content: <CategoryForm option={{type, record: res.data}}/>,
                         onOk: (values, hide) => {
                             hide()
-                            request.post(adminControllerPath + '/edit', {data: {...values}}).then(res => {
+                            request.post(categoryPath + '/edit', {data: {...values}}).then(res => {
                                 if (res && res.code === 1) {
                                     message.success("操作成功")
                                     globalList.refresh()
@@ -80,7 +80,7 @@ class CategoryList extends PureComponent {
                     style={{color: 'red'}}>{this.state.record.name}</span></span>的数据吗?</p>,
                 onOk: (values, hide) => {
                     hide()
-                    request(adminControllerPath + '/delete?id=' + this.state.record.id).then(res => {
+                    request(categoryPath + '/delete?id=' + this.state.record.id).then(res => {
                         if (res && res.code === 1) {
                             globalList.refresh()
                             message.success("删除成功")
@@ -113,7 +113,7 @@ class CategoryList extends PureComponent {
 
     render() {
         return (
-            <List url={adminControllerPath + '/list'} onError={this.handleError} onMount={this.onMount}>
+            <List url={categoryPath + '/list'} onError={this.handleError} onMount={this.onMount}>
                 <Filter cols={5}>
                     <Filter.Item label="username" name="username"><Input/></Filter.Item>
                     <Filter.Item label="age" name="age"><Input/></Filter.Item>

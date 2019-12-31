@@ -7,7 +7,7 @@ const validate = {
     name: {type: "string", required: true, message: '规格组不能为空'},
     categoryId: {type: "integer", required: true, message: '商品类目不能为空'}
 }
-const adminControllerPath = '/mall/category'
+const categoryPath = '/mall/category'
 
 class SpecificationGroupForm extends PureComponent {
     state = {
@@ -33,7 +33,7 @@ class SpecificationGroupForm extends PureComponent {
             this.setState({display: 'block'})
         }
         //取出 上级类目
-        request.get(adminControllerPath + '/treeSelect').then(res => {
+        request.get(categoryPath + '/treeSelect').then(res => {
             if (res && res.code === 1) {
                 this.setState({treeSelectData: res.data})
             }

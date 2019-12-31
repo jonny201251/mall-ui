@@ -6,7 +6,7 @@ import request from '../../../utils/request'
 const validate = {
     name: {type: "string", required: true, message: '规格参数不能为空'}
 }
-const adminControllerPath = '/mall/category'
+const categoryPath = '/mall/category'
 const trueOrFalse = [
     {label: '是', value: 1},
     {label: '否', value: 0}
@@ -36,7 +36,7 @@ class SpecificationParamForm extends PureComponent {
             this.setState({display: 'block'})
         }
         //取出 上级类目
-        request.get(adminControllerPath + '/treeSelect').then(res => {
+        request.get(categoryPath + '/treeSelect').then(res => {
             if (res && res.code === 1) {
                 this.setState({treeSelectData: res.data})
             }

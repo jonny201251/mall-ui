@@ -16,7 +16,7 @@ const templateOption = [
     {label: '复杂规格', value: 1}
 ]
 
-const adminControllerPath = '/mall/category'
+const categoryPath = '/mall/category'
 
 class CategoryForm extends PureComponent {
     state = {
@@ -41,7 +41,7 @@ class CategoryForm extends PureComponent {
             this.setState({display: 'block'})
         }
         //取出 上级类目
-        request.get(adminControllerPath + '/treeSelect').then(res => {
+        request.get(categoryPath + '/treeSelect').then(res => {
             if (res && res.code === 1) {
                 this.setState({treeSelectData: res.data})
             }

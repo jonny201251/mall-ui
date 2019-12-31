@@ -10,8 +10,8 @@ import request from '../../../utils/request'
 import EasySpecParamForm from "../../EasySpecification/EasySpecParamForm";
 
 let globalList
-const adminControllerPath = '/mall/complexSpecGroup'
-const adminControllerPath2 = '/mall/category'
+const complexSpecGroupPath = '/mall/complexSpecGroup'
+const categoryPath = '/mall/category'
 
 class SpecificationGroupList extends PureComponent {
     state = {
@@ -24,7 +24,7 @@ class SpecificationGroupList extends PureComponent {
                 return
             }
             //查看该商品类目的规格模板
-            request(adminControllerPath2 + '/getById?id=' + this.state.categoryId).then(res => {
+            request(categoryPath + '/getById?id=' + this.state.categoryId).then(res => {
                 if (res && res.code === 1) {
                     if (res.data.template === 1) {
                         Dialog.show({
@@ -36,7 +36,7 @@ class SpecificationGroupList extends PureComponent {
                             content: <SpecificationGroupForm option={{type, categoryId: this.state.categoryId}}/>,
                             onOk: (values, hide) => {
                                 hide()
-                                request.post(adminControllerPath + '/add', {data: {...values}}).then(res => {
+                                request.post(complexSpecGroupPath + '/add', {data: {...values}}).then(res => {
                                     if (res && res.code === 1) {
                                         message.success("操作成功")
                                         globalList.refresh()
@@ -59,7 +59,7 @@ class SpecificationGroupList extends PureComponent {
                 return
             }
             let title = 'edit' === type ? '编辑' : '浏览'
-            request(adminControllerPath + '/getById?id=' + this.state.record.id).then(res => {
+            request(complexSpecGroupPath + '/getById?id=' + this.state.record.id).then(res => {
                 if (res && res.code === 1) {
                     Dialog.show({
                         title: title,
@@ -70,7 +70,7 @@ class SpecificationGroupList extends PureComponent {
                         content: <SpecificationGroupForm option={{type, record: res.data}}/>,
                         onOk: (values, hide) => {
                             hide()
-                            request.post(adminControllerPath + '/edit', {data: {...values}}).then(res => {
+                            request.post(complexSpecGroupPath + '/edit', {data: {...values}}).then(res => {
                                 if (res && res.code === 1) {
                                     message.success("操作成功")
                                     globalList.refresh()
@@ -98,7 +98,7 @@ class SpecificationGroupList extends PureComponent {
                     style={{color: 'red'}}>{this.state.record.name}</span></span>的数据吗?</p>,
                 onOk: (values, hide) => {
                     hide()
-                    request(adminControllerPath + '/delete?id=' + this.state.record.id).then(res => {
+                    request(complexSpecGroupPath + '/delete?id=' + this.state.record.id).then(res => {
                         if (res && res.code === 1) {
                             globalList.refresh()
                             message.success("删除成功")
@@ -142,7 +142,7 @@ class SpecificationGroupList extends PureComponent {
 
     componentWillMount() {
         //取出 上级类目
-        request.get(adminControllerPath2 + '/tree').then(res => {
+        request.get(categoryPath + '/tree').then(res => {
             if (res && res.code === 1) {
                 this.setState({treeData: res.data})
             }
@@ -153,10 +153,10 @@ class SpecificationGroupList extends PureComponent {
         if (selectedKeys.length > 0) {
             let categoryId = parseInt(selectedKeys[0])
             this.setState({categoryId})//点击分页时，传递的参数
-            this.list.setUrl(adminControllerPath + '/list?categoryId=' + categoryId)
+            this.list.setUrl(complexSpecGroupPath + '/list?categoryId=' + categoryId)
             this.list.refresh()
         } else {
-            this.list.setUrl(adminControllerPath + '/list?categoryId=-1')
+            this.list.setUrl(complexSpecGroupPath + '/list?categoryId=-1')
             this.list.refresh()
         }
     }
@@ -176,7 +176,7 @@ class SpecificationGroupList extends PureComponent {
                     </Tree>
                 </Col>
                 <Col span={19}>
-                    <List url={adminControllerPath + '/list?category=' + (this.state.categoryId || -1)}
+                    <List url={complexSpecGroupPath + '/list?category=' + (this.state.categoryId || -1)}
                           onError={this.handleError}
                           onMount={this.onMount}>
                         <div className={styles.marginBottom10}>

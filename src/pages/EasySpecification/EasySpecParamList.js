@@ -8,8 +8,8 @@ import EasySpecParamForm from './EasySpecParamForm'
 import request from '../../utils/request'
 
 let globalList
-const adminControllerPath = '/mall/easySpecParam'
-const adminControllerPath2 = '/mall/category'
+const easySpecParamPath = '/mall/easySpecParam'
+const categoryPath = '/mall/category'
 
 class SpecificationParamList extends PureComponent {
     state = {
@@ -23,7 +23,7 @@ class SpecificationParamList extends PureComponent {
                 return
             }
             //查看该商品类目的规格模板
-            request(adminControllerPath2 + '/getById?id=' + this.state.categoryId).then(res => {
+            request(categoryPath + '/getById?id=' + this.state.categoryId).then(res => {
                 if (res && res.code === 1) {
                     if (res.data.template === 0) {
                         Dialog.show({
@@ -35,7 +35,7 @@ class SpecificationParamList extends PureComponent {
                             content: <EasySpecParamForm option={{type, categoryId: this.state.categoryId}}/>,
                             onOk: (values, hide) => {
                                 hide()
-                                request.post(adminControllerPath + '/add', {data: {...values}}).then(res => {
+                                request.post(easySpecParamPath + '/add', {data: {...values}}).then(res => {
                                     if (res && res.code === 1) {
                                         message.success("操作成功")
                                         globalList.refresh()
@@ -58,7 +58,7 @@ class SpecificationParamList extends PureComponent {
                 return
             }
             let title = 'edit' === type ? '编辑' : '浏览'
-            request(adminControllerPath + '/getById?id=' + this.state.record.id).then(res => {
+            request(easySpecParamPath + '/getById?id=' + this.state.record.id).then(res => {
                 if (res && res.code === 1) {
                     Dialog.show({
                         title: title,
@@ -69,7 +69,7 @@ class SpecificationParamList extends PureComponent {
                         content: <EasySpecParamForm option={{type, record: res.data}}/>,
                         onOk: (values, hide) => {
                             hide()
-                            request.post(adminControllerPath + '/edit', {data: {...values}}).then(res => {
+                            request.post(easySpecParamPath + '/edit', {data: {...values}}).then(res => {
                                 if (res && res.code === 1) {
                                     message.success("操作成功")
                                     globalList.refresh()
@@ -97,7 +97,7 @@ class SpecificationParamList extends PureComponent {
                     style={{color: 'red'}}>{this.state.record.name}</span></span>的数据吗?</p>,
                 onOk: (values, hide) => {
                     hide()
-                    request(adminControllerPath + '/delete?id=' + this.state.record.id).then(res => {
+                    request(easySpecParamPath + '/delete?id=' + this.state.record.id).then(res => {
                         if (res && res.code === 1) {
                             globalList.refresh()
                             message.success("删除成功")
@@ -138,7 +138,7 @@ class SpecificationParamList extends PureComponent {
 
     componentWillMount() {
         //取出 上级类目
-        request.get(adminControllerPath2 + '/tree').then(res => {
+        request.get(categoryPath + '/tree').then(res => {
             if (res && res.code === 1) {
                 this.setState({treeData: res.data})
             }
@@ -149,10 +149,10 @@ class SpecificationParamList extends PureComponent {
         if (selectedKeys.length > 0) {
             let categoryId = parseInt(selectedKeys[0])
             this.setState({categoryId})//点击分页时，传递的参数
-            this.list.setUrl(adminControllerPath + '/list?categoryId=' + categoryId)
+            this.list.setUrl(easySpecParamPath + '/list?categoryId=' + categoryId)
             this.list.refresh()
         } else {
-            this.list.setUrl(adminControllerPath + '/list?categoryId=-1')
+            this.list.setUrl(easySpecParamPath + '/list?categoryId=-1')
             this.list.refresh()
         }
     }
@@ -174,7 +174,7 @@ class SpecificationParamList extends PureComponent {
                     </Col>
                     <Col span={19}>
                         <List
-                            url={adminControllerPath + '/list?categoryId=' + (this.state.categoryId || -1)}
+                            url={easySpecParamPath + '/list?categoryId=' + (this.state.categoryId || -1)}
                             onMount={this.onMount}>
                             <div className={styles.marginBottom10}>
                                 <Button icon="plus" type="primary"
