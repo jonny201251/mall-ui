@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react'
 import {Button, message, Steps, Breadcrumb, Card, Icon} from 'antd'
-import Form, {FormCore, FormItem} from 'noform'
+import Form, {FormCore, FormItem, If} from 'noform'
 import {Input, Radio, TreeSelect, Select, InputNumber, Upload} from 'nowrapper/lib/antd'
 import {InlineRepeater, Selectify} from 'nowrapper/lib/antd/repeater'
 import request from '../../../utils/request'
@@ -32,11 +32,15 @@ export default class ItemAdd extends PureComponent {
         defaultFileList: [],
         //editor
         editorState: BraftEditor.createEditorState(''),
+        //
+        genericSpecDisplay: 'none',
+        specialSpecDisplay: 'none'
     }
 
     constructor(props) {
         super(props);
         this.core = new FormCore({validateConfig: validate});
+        this.core2 = new FormCore();
     }
 
     //商品图片
@@ -120,14 +124,19 @@ export default class ItemAdd extends PureComponent {
                 this.setState({brandSelectOptions: res.data})
             }
         })
-    }
-
-    showSpec = () => {
-
+        //根据categoryId获取规格参数
+        request.get(spuPath + '/specAll?categoryId=' + categoryId).then(res => {
+            if (res && res.code === 1) {
+                this.setState({specAll: res.data})
+            }
+        })
     }
 
     onClick = () => {
         console.log(this.core.getValues())
+        console.log(this.core2.getValues())
+        console.log(JSON.stringify(this.core2.getValues()));
+        return
         this.core.validate((err) => {
             if (!err) {
                 //校验商品图片
@@ -144,6 +153,8 @@ export default class ItemAdd extends PureComponent {
                 formData.append('description', this.state.outputHTML)
                 //表单数据
                 formData.append("form", JSON.stringify(this.core.getValues()))
+                //通用规格
+                formData.append('generic', JSON.stringify(this.core2.getValues()))
                 //异步请求
                 request.post(spuPath + '/add', {data: formData}).then(res => {
                     if (res && res.code === 1) {
@@ -154,6 +165,27 @@ export default class ItemAdd extends PureComponent {
                 })
             }
         })
+    }
+
+    showGenericSpec = () => {
+        let arr = []
+        if (this.state.specAll.genericSpec) {
+            this.setState({genericSpecDisplay: ''})
+            this.state.specAll.genericSpec.map(tmp => arr.push(<FormItem label={tmp.label}
+                                                                         name={tmp.name}><Input/></FormItem>))
+        }
+        return arr
+    }
+    showSpecialSpec = () => {
+        if (this.state.specAll.specialSpec) {
+            this.setState({specialSpecDisplay: ''})
+            return this.state.specAll.specialSpec.map(tmp => <FormItem label={tmp.label} name={tmp.name}>
+                <SelectInlineRepeater locale='zh' selectMode="multiple" multiple>
+                    <FormItem label='属性值' name="value"><Input/></FormItem>
+                </SelectInlineRepeater>
+            </FormItem>)
+        }
+
     }
 
     render() {
@@ -221,11 +253,13 @@ export default class ItemAdd extends PureComponent {
                             />
                         </div>
                     </Card>
-                    <Card title='商品的通用属性' style={{marginTop: 10}}>
-
-                    </Card>
-                    <Card title='商品的特有属性' style={{marginTop: 10}}>
-
+                    <Form core={this.core2}>
+                        <Card title='商品的通用属性' style={{marginTop: 10, display: this.state.genericSpecDisplay}}>
+                            {this.state.specAll ? this.showGenericSpec() : ''}
+                        </Card>
+                    </Form>
+                    <Card title='商品的特有属性' style={{marginTop: 10, display: this.state.specialSpecDisplay}}>
+                        {this.state.specAll ? this.showSpecialSpec() : ''}
                     </Card>
                     <Card title='商品的其他属性' style={{marginTop: 10}}>
                         <FormItem name="spec_seller_define">
@@ -240,7 +274,7 @@ export default class ItemAdd extends PureComponent {
                         <FormItem label="商品库存" name="tmpStock" required={true}><InputNumber/></FormItem>
                     </Card>
                     <div style={{marginTop: 20}}>
-                        <Button size='large' type="primary" onClick={this.onClick} style={{width:200}}>发布</Button>
+                        <Button size='large' type="primary" onClick={this.onClick} style={{width: 200}}>发布</Button>
                     </div>
                 </Form>
             </div>
