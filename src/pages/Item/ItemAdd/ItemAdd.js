@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react'
-import {Button, message, Steps, Breadcrumb, Card, Icon} from 'antd'
+import {Breadcrumb, Button, Card, Icon, message,InputNumber} from 'antd'
 import Form, {FormCore, FormItem, If} from 'noform'
-import {Input, Radio, TreeSelect, Select, InputNumber, Upload} from 'nowrapper/lib/antd'
+import {Input, Radio, Select, TreeSelect, Upload} from 'nowrapper/lib/antd'
 import {InlineRepeater, Selectify} from 'nowrapper/lib/antd/repeater'
 import request from '../../../utils/request'
 import uploadStyle from './upload.less'
@@ -16,9 +16,14 @@ const validate = {
     categoryId: {type: "number", required: true, message: '商品类目不能为空'},
     title: {type: "string", required: true, message: '商品标题不能为空'},
     brandId: {type: "number", required: true, message: '品牌不能为空'},
-    tmpPrice: {type: "number", required: true, message: '商品价格不能为空'},
+    // tmpPrice: {type: "number", required: true, message: '商品价格不能为空'},
+    tmpPrice:{type: "number", required: true, transform(value) {return parseInt(value, 10)}, message: '商品价格不能为空'},
     tmpStock: {type: "number", required: true, message: '商品库存不能为空'},
 }
+const trueOrFalse = [
+    {label: '是', value: 1},
+    {label: '否', value: 0}
+]
 
 const categoryPath = '/mall/category'
 const spuPath = '/mall/spu'
@@ -172,7 +177,7 @@ export default class ItemAdd extends PureComponent {
         if (this.state.specAll.genericSpec) {
             this.setState({genericSpecDisplay: ''})
             this.state.specAll.genericSpec.map(tmp => arr.push(<FormItem label={tmp.label}
-                                                                         name={tmp.name}><Input/></FormItem>))
+                                                                         name={tmp.name} inline><Input/></FormItem>))
         }
         return arr
     }
@@ -185,7 +190,16 @@ export default class ItemAdd extends PureComponent {
                 </SelectInlineRepeater>
             </FormItem>)
         }
-
+    }
+    showSkuItem = () => {
+        return (<FormItem label="库存商品" name="skuItem">
+            <SelectInlineRepeater locale='zh' selectMode="multiple" multiple>
+                <FormItem label='销售价格' name="price" defaultMinWidth={false}><InputNumber style={{width:120}}/></FormItem>
+                <FormItem label='库存' name="stock" defaultMinWidth={false}><InputNumber style={{width:120}}/></FormItem>
+                <FormItem label='商品货号' name="skuCode" defaultMinWidth={false}><Input style={{width:200}}/></FormItem>
+                <FormItem label='是否上架' name="saleable" defaultValue={1} defaultMinWidth={false}><Radio.Group options={trueOrFalse} style={{width:0}}/></FormItem>
+            </SelectInlineRepeater>
+        </FormItem>)
     }
 
     render() {
@@ -210,7 +224,7 @@ export default class ItemAdd extends PureComponent {
         ]
         return (
             <div>
-                <Form core={this.core}>
+                <Form core={this.core} direction="vertical-top">
                     <FormItem style={{display: 'none'}} name="id"><Input/></FormItem>
                     <Card title='商品的类目'>
                         <FormItem name="categoryId">
@@ -225,7 +239,7 @@ export default class ItemAdd extends PureComponent {
                     </Card>
                     <Card title='商品的基本信息' style={{marginTop: 10}}>
                         <FormItem label="商品标题" name="title" required={true}><Input/></FormItem>
-                        <FormItem label="副标题" name="subTitle"><Input/></FormItem>
+                        <FormItem label="商品的副标题" name="subTitle"><Input/></FormItem>
                         <FormItem label="品牌" name="brandId" required={true}><Select
                             options={this.state.brandSelectOptions}
                             required={true}/></FormItem>
@@ -253,7 +267,7 @@ export default class ItemAdd extends PureComponent {
                             />
                         </div>
                     </Card>
-                    <Form core={this.core2}>
+                    <Form core={this.core2} direction="vertical-top">
                         <Card title='商品的通用属性' style={{marginTop: 10, display: this.state.genericSpecDisplay}}>
                             {this.state.specAll ? this.showGenericSpec() : ''}
                         </Card>
@@ -270,8 +284,13 @@ export default class ItemAdd extends PureComponent {
                         </FormItem>
                     </Card>
                     <Card title='商品的价格、库存' style={{marginTop: 10}}>
-                        <FormItem label="商品价格" name="tmpPrice" required={true}><InputNumber/></FormItem>
-                        <FormItem label="商品库存" name="tmpStock" required={true}><InputNumber/></FormItem>
+                        <FormItem label="商品价格" name="tmpPrice" required={true} inline><InputNumber/></FormItem>
+                        <FormItem label="商品库存" name="tmpStock" required={true} inline><InputNumber/></FormItem>
+                        <If when={(values) => {
+                            return values.tmpPrice !== null && values.tmpStock !== null && this.state.specialSpecDisplay !== 'none';
+                        }}>
+                            {this.state.specAll ? this.showSkuItem() : ''}
+                        </If>
                     </Card>
                     <div style={{marginTop: 20}}>
                         <Button size='large' type="primary" onClick={this.onClick} style={{width: 200}}>发布</Button>
