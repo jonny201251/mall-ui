@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react'
-import {Breadcrumb, Button, Card, Icon, message,InputNumber} from 'antd'
+import {Breadcrumb, Button, Card, Icon, InputNumber, message} from 'antd'
 import Form, {FormCore, FormItem, If} from 'noform'
 import {Input, Radio, Select, TreeSelect, Upload} from 'nowrapper/lib/antd'
 import {InlineRepeater, Selectify} from 'nowrapper/lib/antd/repeater'
@@ -17,7 +17,11 @@ const validate = {
     title: {type: "string", required: true, message: '商品标题不能为空'},
     brandId: {type: "number", required: true, message: '品牌不能为空'},
     // tmpPrice: {type: "number", required: true, message: '商品价格不能为空'},
-    tmpPrice:{type: "number", required: true, transform(value) {return parseInt(value, 10)}, message: '商品价格不能为空'},
+    tmpPrice: {
+        type: "number", required: true, transform(value) {
+            return parseInt(value, 10)
+        }, message: '商品价格不能为空'
+    },
     tmpStock: {type: "number", required: true, message: '商品库存不能为空'},
 }
 const trueOrFalse = [
@@ -56,8 +60,11 @@ export default class ItemAdd extends PureComponent {
     onRemove = file => {
         this.setState(state => {
             const index = state.fileList.indexOf(file);
+            console.log(index);
             const newFileList = state.fileList.slice();
+            console.log(newFileList);
             newFileList.splice(index, 1);
+            console.log(newFileList);
             return {fileList: newFileList}
         })
     }
@@ -108,6 +115,20 @@ export default class ItemAdd extends PureComponent {
         return this.state.categoryNames.map((name) => <Breadcrumb.Item>{name}</Breadcrumb.Item>)
     }
     onSelect = (value, node, extra) => {
+        //先重置数据
+        this.core.reset()
+        this.core2.reset()
+        this.setState({
+            //商品图片
+            fileList: [],
+            defaultFileList: [],
+            //editor
+            editorState: BraftEditor.createEditorState(''),
+            //
+            genericSpecDisplay: 'none',
+            specialSpecDisplay: 'none'
+        })
+
         let categoryId = value
         this.setState({categoryId})
         // let title = node.props.title
@@ -135,6 +156,8 @@ export default class ItemAdd extends PureComponent {
                 this.setState({specAll: res.data})
             }
         })
+        console.log("aa");
+        console.log(this.state.fileList);
     }
 
     onClick = () => {
@@ -184,7 +207,8 @@ export default class ItemAdd extends PureComponent {
     showSpecialSpec = () => {
         if (this.state.specAll.specialSpec) {
             this.setState({specialSpecDisplay: ''})
-            return this.state.specAll.specialSpec.map(tmp => <FormItem label={tmp.label} name={tmp.name}>
+            return this.state.specAll.specialSpec.map(tmp => <FormItem onChange={this.sku_change} label={tmp.label}
+                                                                       name={tmp.name}>
                 <SelectInlineRepeater locale='zh' selectMode="multiple" multiple>
                     <FormItem label='属性值' name="value"><Input/></FormItem>
                 </SelectInlineRepeater>
@@ -192,14 +216,141 @@ export default class ItemAdd extends PureComponent {
         }
     }
     showSkuItem = () => {
-        return (<FormItem label="库存商品" name="skuItem">
-            <SelectInlineRepeater locale='zh' selectMode="multiple" multiple>
-                <FormItem label='销售价格' name="price" defaultMinWidth={false}><InputNumber style={{width:120}}/></FormItem>
-                <FormItem label='库存' name="stock" defaultMinWidth={false}><InputNumber style={{width:120}}/></FormItem>
-                <FormItem label='商品货号' name="skuCode" defaultMinWidth={false}><Input style={{width:200}}/></FormItem>
-                <FormItem label='是否上架' name="saleable" defaultValue={1} defaultMinWidth={false}><Radio.Group options={trueOrFalse} style={{width:0}}/></FormItem>
-            </SelectInlineRepeater>
-        </FormItem>)
+        let arr = []
+        if (this.state.specAll.specialSpec) {
+            this.state.specAll.specialSpec.map(tmp => arr.push(<FormItem status="disabled" label={tmp.label}
+                                                                         name={tmp.name}
+                                                                         defaultMinWidth={false}><Input
+                style={{width: 120}}/></FormItem>))
+            arr.push(<FormItem label='商品价格' name="price" defaultMinWidth={false}><InputNumber
+                style={{width: 120}}/></FormItem>)
+            arr.push(<FormItem label='库存' name="stock" defaultMinWidth={false}><InputNumber
+                style={{width: 120}}/></FormItem>)
+            arr.push(<FormItem label='商品货号' name="skuCode" defaultMinWidth={false}><Input
+                style={{width: 200}}/></FormItem>)
+            arr.push(<FormItem label='是否上架' name="saleable" defaultMinWidth={false}><Radio.Group
+                options={trueOrFalse} style={{width: 0}}/></FormItem>)
+            arr.push(<FormItem style={{display: 'none'}} name="indexes"><Input/></FormItem>)
+            arr.push(<FormItem style={{display: 'none'}} name="spuSpec"><Input/></FormItem>)
+        }
+        return arr
+    }
+    generateSkuItem = () => {
+        let skuItemData = {dataSource: []}
+        //取出-价格、库存
+        let price = this.core.getValue('tmpPrice')
+        let stock = this.core.getValue('tmpStock')
+
+        if (this.state.specAll.specialSpec) {
+            // alert('generateSkuItem')
+            //取出特有属性
+            let arr = []
+            this.state.specAll.specialSpec.map(tmp => {
+                //tmp：4,机身颜色
+                if (this.core.getValue(tmp.name).dataSource.length > 0) {
+                    let propArr = []
+                    this.core.getValue(tmp.name).dataSource.map(prop => {
+                        if (prop.value) {
+                            propArr.push(prop.value)
+                        }
+                    })
+                    if (propArr.length > 0) {
+                        arr.push({name: tmp.name, propArr})
+                    }
+                }
+            })
+            //遍历-[{name:4,propArr:[红色，蓝色]},{[4G,8G]},{[长,宽]}]
+            if (arr.length > 0) {
+                if (arr.length > 5) {
+                    //预设5个特有属性
+                    message.warning('特有属性=' + arr.length + ',多余预设特性,请联系管理员')
+                    return
+                }
+                //遍历
+                if (arr[0]) {
+                    arr[0].propArr.map(prop0 => {
+                        if (arr[1]) {
+                            arr[1].propArr.map(prop1 => {
+                                if (arr[2]) {
+                                    arr[2].propArr.map(prop2 => {
+                                        if (arr[3]) {
+                                            arr[3].propArr.map(prop3 => {
+                                                if (arr[4]) {
+                                                    arr[4].propArr.map(prop4 => {
+                                                        data[arr[0].name] = prop0
+                                                        data[arr[1].name] = prop1
+                                                        data[arr[2].name] = prop2
+                                                        data[arr[3].name] = prop3
+                                                        data[arr[4].name] = prop4
+                                                        data.price = price
+                                                        data.stock = stock
+                                                        data.saleable = 1
+                                                        skuItemData.dataSource.push(data)
+                                                    })
+                                                } else {
+                                                    data[arr[0].name] = prop0
+                                                    data[arr[1].name] = prop1
+                                                    data[arr[2].name] = prop2
+                                                    data[arr[3].name] = prop3
+                                                    data.price = price
+                                                    data.stock = stock
+                                                    data.saleable = 1
+                                                    skuItemData.dataSource.push(data)
+                                                }
+                                            })
+                                        } else {
+                                            let data = {}
+                                            data[arr[0].name] = prop0
+                                            data[arr[1].name] = prop1
+                                            data[arr[2].name] = prop2
+                                            data.price = price
+                                            data.stock = stock
+                                            data.saleable = 1
+                                            skuItemData.dataSource.push(data)
+                                        }
+                                    })
+                                } else {
+                                    let data = {}
+                                    data[arr[0].name] = prop0
+                                    data[arr[1].name] = prop1
+                                    data.price = price
+                                    data.stock = stock
+                                    data.saleable = 1
+                                    skuItemData.dataSource.push(data)
+                                }
+                            })
+                        } else {
+                            let data = {}
+                            data[arr[0].name] = prop0
+                            data.price = price
+                            data.stock = stock
+                            data.saleable = 1
+                            data.indexes = '0_0_0'
+                            data.skuSpec = 'aaaa'
+                            skuItemData.dataSource.push(data)
+                        }
+                    })
+                }
+            }
+            if (skuItemData.dataSource.length > 0) {
+                this.core.setValue('skuItem', skuItemData)
+            }
+        } else {
+            let data = {}
+            data.price = price
+            data.stock = stock
+            data.saleable = 1
+            skuItemData.dataSource.push(data)
+            this.core.setValue('skuItem', skuItemData)
+        }
+        console.log("aa");
+        console.log(skuItemData);
+    }
+
+    sku_change = () => {
+        if (this.core.getValue('tmpPrice') != null && this.core.getValue('tmpStock') != null && this.state.specialSpecDisplay !== 'none') {
+            this.generateSkuItem()
+        }
     }
 
     render() {
@@ -276,7 +427,7 @@ export default class ItemAdd extends PureComponent {
                         {this.state.specAll ? this.showSpecialSpec() : ''}
                     </Card>
                     <Card title='商品的其他属性' style={{marginTop: 10}}>
-                        <FormItem name="spec_seller_define">
+                        <FormItem name="speSellerDefine">
                             <SelectInlineRepeater locale='zh' selectMode="multiple" multiple>
                                 <FormItem label='属性名称' name="name"><Input/></FormItem>
                                 <FormItem label='属性值' name="value"><Input/></FormItem>
@@ -284,12 +435,18 @@ export default class ItemAdd extends PureComponent {
                         </FormItem>
                     </Card>
                     <Card title='商品的价格、库存' style={{marginTop: 10}}>
-                        <FormItem label="商品价格" name="tmpPrice" required={true} inline><InputNumber/></FormItem>
-                        <FormItem label="商品库存" name="tmpStock" required={true} inline><InputNumber/></FormItem>
+                        <FormItem onChange={this.sku_change} label="商品价格" name="tmpPrice" required={true}
+                                  inline><InputNumber/></FormItem>
+                        <FormItem onChange={this.sku_change} label="商品库存" name="tmpStock" required={true}
+                                  inline><InputNumber/></FormItem>
                         <If when={(values) => {
                             return values.tmpPrice !== null && values.tmpStock !== null && this.state.specialSpecDisplay !== 'none';
                         }}>
-                            {this.state.specAll ? this.showSkuItem() : ''}
+                            <FormItem label={<b style={{color: 'red'}}>* 库存商品</b>} name="skuItem" required={true}>
+                                <SelectInlineRepeater locale='zh' selectMode="multiple" multiple>
+                                    {this.state.specAll ? this.showSkuItem() : ''}
+                                </SelectInlineRepeater>
+                            </FormItem>
                         </If>
                     </Card>
                     <div style={{marginTop: 20}}>

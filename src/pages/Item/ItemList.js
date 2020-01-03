@@ -6,6 +6,7 @@ import classNames from 'classnames'
 import styles from '../common.less'
 
 import ItemForm from './ItemForm'
+import ItemAdd from './ItemAdd/ItemAdd'
 import request from '../../utils/request'
 
 let globalList
@@ -19,9 +20,9 @@ class ItemList extends PureComponent {
                 title: '新增',
                 footerAlign: 'label',
                 locale: 'zh',
-                width: 400,
+                width: 1000,
                 enableValidate: true,
-                content: <ItemForm option={{type}}/>,
+                content: <ItemAdd/>,
                 onOk: (values, hide) => {
                     hide()
                     request.post(adminControllerPath + '/add', {data: {...values}}).then(res => {
