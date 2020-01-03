@@ -16,12 +16,7 @@ const validate = {
     categoryId: {type: "number", required: true, message: '商品类目不能为空'},
     title: {type: "string", required: true, message: '商品标题不能为空'},
     brandId: {type: "number", required: true, message: '品牌不能为空'},
-    // tmpPrice: {type: "number", required: true, message: '商品价格不能为空'},
-    tmpPrice: {
-        type: "number", required: true, transform(value) {
-            return parseInt(value, 10)
-        }, message: '商品价格不能为空'
-    },
+    tmpPrice: {type: "number", required: true, message: '商品价格不能为空'},
     tmpStock: {type: "number", required: true, message: '商品库存不能为空'},
 }
 const trueOrFalse = [
@@ -60,11 +55,8 @@ export default class ItemAdd extends PureComponent {
     onRemove = file => {
         this.setState(state => {
             const index = state.fileList.indexOf(file);
-            console.log(index);
             const newFileList = state.fileList.slice();
-            console.log(newFileList);
             newFileList.splice(index, 1);
-            console.log(newFileList);
             return {fileList: newFileList}
         })
     }
@@ -126,7 +118,8 @@ export default class ItemAdd extends PureComponent {
             editorState: BraftEditor.createEditorState(''),
             //
             genericSpecDisplay: 'none',
-            specialSpecDisplay: 'none'
+            specialSpecDisplay: 'none',
+            specAll: {}
         })
 
         let categoryId = value
@@ -156,8 +149,6 @@ export default class ItemAdd extends PureComponent {
                 this.setState({specAll: res.data})
             }
         })
-        console.log("aa");
-        console.log(this.state.fileList);
     }
 
     onClick = () => {
@@ -207,7 +198,7 @@ export default class ItemAdd extends PureComponent {
     showSpecialSpec = () => {
         if (this.state.specAll.specialSpec) {
             this.setState({specialSpecDisplay: ''})
-            return this.state.specAll.specialSpec.map(tmp => <FormItem onChange={this.sku_change} label={tmp.label}
+            return this.state.specAll.specialSpec.map(tmp => <FormItem onChange={this.skuChange} label={tmp.label}
                                                                        name={tmp.name}>
                 <SelectInlineRepeater locale='zh' selectMode="multiple" multiple>
                     <FormItem label='属性值' name="value"><Input/></FormItem>
@@ -218,31 +209,34 @@ export default class ItemAdd extends PureComponent {
     showSkuItem = () => {
         let arr = []
         if (this.state.specAll.specialSpec) {
-            this.state.specAll.specialSpec.map(tmp => arr.push(<FormItem status="disabled" label={tmp.label}
-                                                                         name={tmp.name}
-                                                                         defaultMinWidth={false}><Input
+            this.state.specAll.specialSpec.map(tmp => arr.push(<FormItem status="disabled" label={tmp.label} name={tmp.name} defaultMinWidth={false}><Input
                 style={{width: 120}}/></FormItem>))
-            arr.push(<FormItem label='商品价格' name="price" defaultMinWidth={false}><InputNumber
-                style={{width: 120}}/></FormItem>)
-            arr.push(<FormItem label='库存' name="stock" defaultMinWidth={false}><InputNumber
-                style={{width: 120}}/></FormItem>)
-            arr.push(<FormItem label='商品货号' name="skuCode" defaultMinWidth={false}><Input
-                style={{width: 200}}/></FormItem>)
-            arr.push(<FormItem label='是否上架' name="saleable" defaultMinWidth={false}><Radio.Group
-                options={trueOrFalse} style={{width: 0}}/></FormItem>)
-            arr.push(<FormItem style={{display: 'none'}} name="indexes"><Input/></FormItem>)
-            arr.push(<FormItem style={{display: 'none'}} name="spuSpec"><Input/></FormItem>)
         }
+        arr.push(<FormItem label='商品价格' name="price" defaultMinWidth={false}><InputNumber
+            style={{width: 120}}/></FormItem>)
+        arr.push(<FormItem label='库存' name="stock" defaultMinWidth={false}><InputNumber
+            style={{width: 120}}/></FormItem>)
+        arr.push(<FormItem label='商品货号' name="skuCode" defaultMinWidth={false}><Input
+            style={{width: 200}}/></FormItem>)
+        arr.push(<FormItem label='是否上架' name="saleable" defaultMinWidth={false}><Radio.Group
+            options={trueOrFalse} style={{width: 0}}/></FormItem>)
+        arr.push(<FormItem style={{display: 'none'}} name="indexes"><Input/></FormItem>)
+        arr.push(<FormItem style={{display: 'none'}} name="spuSpec"><Input/></FormItem>)
         return arr
     }
+
+    skuChange = () => {
+        if (this.core.getValue('tmpPrice') != null && this.core.getValue('tmpStock') != null) {
+            this.generateSkuItem()
+        }
+    }
+
     generateSkuItem = () => {
         let skuItemData = {dataSource: []}
         //取出-价格、库存
         let price = this.core.getValue('tmpPrice')
         let stock = this.core.getValue('tmpStock')
-
         if (this.state.specAll.specialSpec) {
-            // alert('generateSkuItem')
             //取出特有属性
             let arr = []
             this.state.specAll.specialSpec.map(tmp => {
@@ -343,15 +337,8 @@ export default class ItemAdd extends PureComponent {
             skuItemData.dataSource.push(data)
             this.core.setValue('skuItem', skuItemData)
         }
-        console.log("aa");
-        console.log(skuItemData);
     }
 
-    sku_change = () => {
-        if (this.core.getValue('tmpPrice') != null && this.core.getValue('tmpStock') != null && this.state.specialSpecDisplay !== 'none') {
-            this.generateSkuItem()
-        }
-    }
 
     render() {
         //editor
@@ -435,12 +422,12 @@ export default class ItemAdd extends PureComponent {
                         </FormItem>
                     </Card>
                     <Card title='商品的价格、库存' style={{marginTop: 10}}>
-                        <FormItem onChange={this.sku_change} label="商品价格" name="tmpPrice" required={true}
+                        <FormItem onChange={this.skuChange} label="商品价格" name="tmpPrice" required={true}
                                   inline><InputNumber/></FormItem>
-                        <FormItem onChange={this.sku_change} label="商品库存" name="tmpStock" required={true}
+                        <FormItem onChange={this.skuChange} label="商品库存" name="tmpStock" required={true}
                                   inline><InputNumber/></FormItem>
                         <If when={(values) => {
-                            return values.tmpPrice !== null && values.tmpStock !== null && this.state.specialSpecDisplay !== 'none';
+                            return values.tmpPrice !== null && values.tmpStock !== null
                         }}>
                             <FormItem label={<b style={{color: 'red'}}>* 库存商品</b>} name="skuItem" required={true}>
                                 <SelectInlineRepeater locale='zh' selectMode="multiple" multiple>
