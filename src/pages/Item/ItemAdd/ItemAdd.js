@@ -36,11 +36,8 @@ export default class ItemAdd extends PureComponent {
         //editor
         editorState: BraftEditor.createEditorState(''),
         //
-        contentDisplay: 'none',
         genericSpecDisplay: 'none',
         specialSpecDisplay: 'none',
-        //skuItem的每个列的宽度
-        skuItemWidth: 120,
     }
 
     constructor(props) {
@@ -121,7 +118,6 @@ export default class ItemAdd extends PureComponent {
             //editor
             editorState: BraftEditor.createEditorState(''),
             //
-            contentDisplay: 'none',
             genericSpecDisplay: 'none',
             specialSpecDisplay: 'none',
             specAll: {}
