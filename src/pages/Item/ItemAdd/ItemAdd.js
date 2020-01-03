@@ -15,7 +15,6 @@ const SelectInlineRepeater = Selectify(InlineRepeater)
 const validate = {
     categoryId: {type: "number", required: true, message: '商品类目不能为空'},
     title: {type: "string", required: true, message: '商品标题不能为空'},
-    brandId: {type: "number", required: true, message: '品牌不能为空'},
     tmpPrice: {type: "number", required: true, message: '商品价格不能为空'},
     tmpStock: {type: "number", required: true, message: '商品库存不能为空'},
 }
@@ -38,7 +37,9 @@ export default class ItemAdd extends PureComponent {
         editorState: BraftEditor.createEditorState(''),
         //
         genericSpecDisplay: 'none',
-        specialSpecDisplay: 'none'
+        specialSpecDisplay: 'none',
+        //skuItem的每个列的宽度
+        skuItemWidth: 120,
     }
 
     constructor(props) {
@@ -221,7 +222,7 @@ export default class ItemAdd extends PureComponent {
         arr.push(<FormItem label='库存' name="stock" defaultMinWidth={false}><InputNumber
             style={{width: 120}}/></FormItem>)
         arr.push(<FormItem label='商品货号' name="skuCode" defaultMinWidth={false}><Input
-            style={{width: 200}}/></FormItem>)
+            style={{width: 120}}/></FormItem>)
         arr.push(<FormItem label='是否上架' name="saleable" defaultMinWidth={false}><Radio.Group
             options={trueOrFalse} style={{width: 0}}/></FormItem>)
         arr.push(<FormItem style={{display: 'none'}} name="indexes"><Input/></FormItem>)
@@ -266,68 +267,98 @@ export default class ItemAdd extends PureComponent {
                 }
                 //遍历
                 if (arr[0]) {
-                    arr[0].propArr.map(prop0 => {
+                    for (let a = 0; a < arr[0].propArr.length; a++) {
                         if (arr[1]) {
-                            arr[1].propArr.map(prop1 => {
+                            for (let b = 0; b < arr[1].propArr.length; b++) {
                                 if (arr[2]) {
-                                    arr[2].propArr.map(prop2 => {
+                                    for (let c = 0; c < arr[2].propArr.length; c++) {
                                         if (arr[3]) {
-                                            arr[3].propArr.map(prop3 => {
+                                            for (let d = 0; d < arr[3].propArr.length; d++) {
                                                 if (arr[4]) {
-                                                    arr[4].propArr.map(prop4 => {
-                                                        data[arr[0].name] = prop0
-                                                        data[arr[1].name] = prop1
-                                                        data[arr[2].name] = prop2
-                                                        data[arr[3].name] = prop3
-                                                        data[arr[4].name] = prop4
+                                                    for (let e = 0; e < arr[4].propArr.length; e++) {
+                                                        let data = {}
+                                                        data[arr[0].name] = arr[0].propArr[a]
+                                                        data[arr[1].name] = arr[1].propArr[b]
+                                                        data[arr[2].name] = arr[2].propArr[c]
+                                                        data[arr[3].name] = arr[3].propArr[d]
+                                                        data[arr[4].name] = arr[4].propArr[e]
                                                         data.price = price
                                                         data.stock = stock
                                                         data.saleable = 1
+                                                        data.indexes = a + '_' + b + '_' + c + '_' + d + '_' + e
+                                                        let spec = {}
+                                                        spec[arr[0].name] = arr[0].propArr[a]
+                                                        spec[arr[1].name] = arr[1].propArr[b]
+                                                        spec[arr[2].name] = arr[2].propArr[c]
+                                                        spec[arr[3].name] = arr[3].propArr[d]
+                                                        spec[arr[4].name] = arr[4].propArr[e]
+                                                        data.skuSpec = JSON.stringify(spec)
                                                         skuItemData.dataSource.push(data)
-                                                    })
+                                                    }
                                                 } else {
-                                                    data[arr[0].name] = prop0
-                                                    data[arr[1].name] = prop1
-                                                    data[arr[2].name] = prop2
-                                                    data[arr[3].name] = prop3
+                                                    let data = {}
+                                                    data[arr[0].name] = arr[0].propArr[a]
+                                                    data[arr[1].name] = arr[1].propArr[b]
+                                                    data[arr[2].name] = arr[2].propArr[c]
+                                                    data[arr[3].name] = arr[3].propArr[d]
                                                     data.price = price
                                                     data.stock = stock
                                                     data.saleable = 1
+                                                    data.indexes = a + '_' + b + '_' + c + '_' + d
+                                                    let spec = {}
+                                                    spec[arr[0].name] = arr[0].propArr[a]
+                                                    spec[arr[1].name] = arr[1].propArr[b]
+                                                    spec[arr[2].name] = arr[2].propArr[c]
+                                                    spec[arr[3].name] = arr[3].propArr[d]
+                                                    data.skuSpec = JSON.stringify(spec)
                                                     skuItemData.dataSource.push(data)
                                                 }
-                                            })
+                                            }
                                         } else {
                                             let data = {}
-                                            data[arr[0].name] = prop0
-                                            data[arr[1].name] = prop1
-                                            data[arr[2].name] = prop2
+                                            data[arr[0].name] = arr[0].propArr[a]
+                                            data[arr[1].name] = arr[1].propArr[b]
+                                            data[arr[2].name] = arr[2].propArr[c]
                                             data.price = price
                                             data.stock = stock
                                             data.saleable = 1
+                                            data.indexes = a + '_' + b + '_' + c
+                                            let spec = {}
+                                            spec[arr[0].name] = arr[0].propArr[a]
+                                            spec[arr[1].name] = arr[1].propArr[b]
+                                            spec[arr[2].name] = arr[2].propArr[c]
+                                            data.skuSpec = JSON.stringify(spec)
                                             skuItemData.dataSource.push(data)
                                         }
-                                    })
+                                    }
                                 } else {
                                     let data = {}
-                                    data[arr[0].name] = prop0
-                                    data[arr[1].name] = prop1
+                                    data[arr[0].name] = arr[0].propArr[a]
+                                    data[arr[1].name] = arr[1].propArr[b]
                                     data.price = price
                                     data.stock = stock
                                     data.saleable = 1
+                                    data.indexes = a + '_' + b
+                                    let spec = {}
+                                    spec[arr[0].name] = arr[0].propArr[a]
+                                    spec[arr[1].name] = arr[1].propArr[b]
+                                    data.skuSpec = JSON.stringify(spec)
                                     skuItemData.dataSource.push(data)
                                 }
-                            })
+                            }
                         } else {
                             let data = {}
-                            data[arr[0].name] = prop0
+                            data[arr[0].name] = arr[0].propArr[a]
                             data.price = price
                             data.stock = stock
                             data.saleable = 1
-                            data.indexes = '0_0_0'
-                            data.skuSpec = 'aaaa'
+                            data.indexes = a + ''
+                            let spec = {}
+                            spec[arr[0].name] = arr[0].propArr[a]
+                            data.skuSpec = JSON.stringify(spec)
                             skuItemData.dataSource.push(data)
                         }
-                    })
+                    }
                 }
             } else {
                 let data = {}
@@ -375,81 +406,94 @@ export default class ItemAdd extends PureComponent {
             <div>
                 <Form core={this.core} direction="vertical-top">
                     <FormItem style={{display: 'none'}} name="id"><Input/></FormItem>
-                    <Card title='商品的类目'>
-                        <FormItem name="categoryId">
-                            <TreeSelect size={'large'} treeData={this.state.treeSelectData} treeDefaultExpandAll
+                    <Card>
+                        <FormItem label="商品的类目" name="categoryId" required={true}>
+                            <TreeSelect treeData={this.state.treeSelectData} treeDefaultExpandAll
                                         onSelect={(value, node, extra,) => this.onSelect(value, node, extra)}/>
                         </FormItem>
                         <div style={{marginTop: 20}}>
-                            <Breadcrumb style={{fontSize: 18}} separator=">">
+                            <Breadcrumb style={{fontSize: 16, marginLeft: 10}} separator=">">
                                 {this.state.categoryNames ? this.showCategoryNames() : ''}
                             </Breadcrumb>
                         </div>
                     </Card>
-                    <Card title='商品的基本信息' style={{marginTop: 10}}>
-                        <FormItem label="商品标题" name="title" required={true}><Input/></FormItem>
-                        <FormItem label="商品的副标题" name="subTitle"><Input/></FormItem>
-                        <FormItem label="品牌" name="brandId" required={true}><Select
-                            options={this.state.brandSelectOptions}
-                            required={true}/></FormItem>
-                        <FormItem label="商品图片" required={true}/>
-                        <div style={{width: 400}}>
-                            <Upload.Dragger listType='picture'
-                                            beforeUpload={this.beforeUpload} onRemove={this.onRemove}
-                                            className={uploadStyle.upload} defaultFileList={this.state.defaultFileList}>
-                                <p className="ant-upload-drag-icon">
-                                    <Icon type="plus"/>
-                                </p>
-                            </Upload.Dragger>
-                        </div>
-                        <FormItem label="包装清单" name="packingList"><Input.TextArea/></FormItem>
-                        <FormItem label="售后服务" name="afterService"><Input.TextArea/></FormItem>
-                    </Card>
-                    <Card title='商品的描述' style={{marginTop: 10}}>
-                        <div className="editor-wrapper">
-                            <BraftEditor
-                                value={this.state.editorState}
-                                onChange={this.handleChange}
-                                extendControls={extendControls}
-                                excludeControls={['media', 'fullscreen']}
-                                contentStyle={{height: 400}}
-                            />
-                        </div>
-                    </Card>
-                    <Form core={this.core2} direction="vertical-top">
-                        <Card title='商品的通用属性' style={{marginTop: 10, display: this.state.genericSpecDisplay}}>
-                            {this.state.specAll ? this.showGenericSpec() : ''}
+                    <If when={(values) => {
+                        return values.categoryId !== null
+                    }}>
+                        <Card title='商品的基本信息' style={{marginTop: 10}}>
+                            <FormItem label="品牌" name="brandId">
+                                <Select options={this.state.brandSelectOptions}/>
+                            </FormItem>
+                            <FormItem label="商品标题" name="title" required={true} defaultMinWidth={false}>
+                                <Input style={{width: 400}}/>
+                            </FormItem>
+                            <FormItem label="商品的副标题" name="subTitle" defaultMinWidth={false}>
+                                <Input style={{width: 400}}/>
+                            </FormItem>
+                            <FormItem label="商品图片" required={true}/>
+                            <div style={{width: 400}}>
+                                <Upload.Dragger listType='picture'
+                                                beforeUpload={this.beforeUpload} onRemove={this.onRemove}
+                                                className={uploadStyle.upload}
+                                                defaultFileList={this.state.defaultFileList}>
+                                    <p className="ant-upload-drag-icon">
+                                        <Icon type="plus"/>
+                                    </p>
+                                </Upload.Dragger>
+                            </div>
+                            <FormItem label="包装清单" name="packingList" defaultMinWidth={false}>
+                                <Input.TextArea style={{width: 400}}/>
+                            </FormItem>
+                            <FormItem label="售后服务" name="afterService" defaultMinWidth={false}>
+                                <Input.TextArea style={{width: 400}}/>
+                            </FormItem>
                         </Card>
-                    </Form>
-                    <Card title='商品的特有属性' style={{marginTop: 10, display: this.state.specialSpecDisplay}}>
-                        {this.state.specAll ? this.showSpecialSpec() : ''}
-                    </Card>
-                    <Card title='商品的其他属性' style={{marginTop: 10}}>
-                        <FormItem name="speSellerDefine">
-                            <SelectInlineRepeater locale='zh' selectMode="multiple" multiple>
-                                <FormItem label='属性名称' name="name"><Input/></FormItem>
-                                <FormItem label='属性值' name="value"><Input/></FormItem>
-                            </SelectInlineRepeater>
-                        </FormItem>
-                    </Card>
-                    <Card title='商品的价格、库存' style={{marginTop: 10}}>
-                        <FormItem onChange={this.skuChange} label="商品价格" name="tmpPrice" required={true}
-                                  inline><InputNumber/></FormItem>
-                        <FormItem onChange={this.skuChange} label="商品库存" name="tmpStock" required={true}
-                                  inline><InputNumber/></FormItem>
-                        <If when={(values) => {
-                            return values.tmpPrice !== null && values.tmpStock !== null
-                        }}>
-                            <FormItem label={<b style={{color: 'red'}}>* 库存商品</b>} name="skuItem" required={true}>
+                        <Card title='商品的描述' style={{marginTop: 10}}>
+                            <div className="editor-wrapper">
+                                <BraftEditor
+                                    value={this.state.editorState}
+                                    onChange={this.handleChange}
+                                    extendControls={extendControls}
+                                    excludeControls={['media', 'fullscreen']}
+                                    contentStyle={{height: 400}}
+                                />
+                            </div>
+                        </Card>
+                        <Form core={this.core2} direction="vertical-top">
+                            <Card title='商品的通用属性' style={{marginTop: 10, display: this.state.genericSpecDisplay}}>
+                                {this.state.specAll ? this.showGenericSpec() : ''}
+                            </Card>
+                        </Form>
+                        <Card title='商品的特有属性' style={{marginTop: 10, display: this.state.specialSpecDisplay}}>
+                            {this.state.specAll ? this.showSpecialSpec() : ''}
+                        </Card>
+                        <Card title='商品的其他属性' style={{marginTop: 10}}>
+                            <FormItem name="speSellerDefine">
                                 <SelectInlineRepeater locale='zh' selectMode="multiple" multiple>
-                                    {this.state.specAll ? this.showSkuItem() : ''}
+                                    <FormItem label='属性名称' name="name"><Input/></FormItem>
+                                    <FormItem label='属性值' name="value"><Input/></FormItem>
                                 </SelectInlineRepeater>
                             </FormItem>
-                        </If>
-                    </Card>
-                    <div style={{marginTop: 20}}>
-                        <Button size='large' type="primary" onClick={this.onClick} style={{width: 200}}>发布</Button>
-                    </div>
+                        </Card>
+                        <Card title='商品的价格、库存' style={{marginTop: 10}}>
+                            <FormItem onChange={this.skuChange} label="商品价格" name="tmpPrice" required={true}
+                                      inline><InputNumber/></FormItem>
+                            <FormItem onChange={this.skuChange} label="商品库存" name="tmpStock" required={true}
+                                      inline><InputNumber/></FormItem>
+                            <If when={(values) => {
+                                return values.tmpPrice !== null && values.tmpStock !== null
+                            }}>
+                                <FormItem label={<b style={{color: 'red'}}>* 库存商品</b>} name="skuItem" required={true}>
+                                    <SelectInlineRepeater locale='zh' selectMode="multiple" multiple>
+                                        {this.state.specAll ? this.showSkuItem() : ''}
+                                    </SelectInlineRepeater>
+                                </FormItem>
+                            </If>
+                        </Card>
+                        <div style={{marginTop: 20}}>
+                            <Button size='large' type="primary" onClick={this.onClick} style={{width: 200}}>发布</Button>
+                        </div>
+                    </If>
                 </Form>
             </div>
         )
