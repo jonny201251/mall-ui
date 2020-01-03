@@ -36,6 +36,7 @@ export default class ItemAdd extends PureComponent {
         //editor
         editorState: BraftEditor.createEditorState(''),
         //
+        contentDisplay: 'none',
         genericSpecDisplay: 'none',
         specialSpecDisplay: 'none',
         //skuItem的每个列的宽度
@@ -120,6 +121,7 @@ export default class ItemAdd extends PureComponent {
             //editor
             editorState: BraftEditor.createEditorState(''),
             //
+            contentDisplay: 'none',
             genericSpecDisplay: 'none',
             specialSpecDisplay: 'none',
             specAll: {}
@@ -379,6 +381,7 @@ export default class ItemAdd extends PureComponent {
             skuItemData.dataSource.push(data)
             this.core.setValue('skuItem', skuItemData)
         }
+        console.log("aa");
     }
 
 
@@ -417,9 +420,7 @@ export default class ItemAdd extends PureComponent {
                             </Breadcrumb>
                         </div>
                     </Card>
-                    <If when={(values) => {
-                        return values.categoryId !== null
-                    }}>
+                    <div style={{display: this.state.categoryId ? '' : 'none'}}>
                         <Card title='商品的基本信息' style={{marginTop: 10}}>
                             <FormItem label="品牌" name="brandId">
                                 <Select options={this.state.brandSelectOptions}/>
@@ -431,7 +432,7 @@ export default class ItemAdd extends PureComponent {
                                 <Input style={{width: 400}}/>
                             </FormItem>
                             <FormItem label="商品图片" required={true}/>
-                            <div style={{width: 400}}>
+                            <div style={{width: 200}}>
                                 <Upload.Dragger listType='picture'
                                                 beforeUpload={this.beforeUpload} onRemove={this.onRemove}
                                                 className={uploadStyle.upload}
@@ -493,7 +494,7 @@ export default class ItemAdd extends PureComponent {
                         <div style={{marginTop: 20}}>
                             <Button size='large' type="primary" onClick={this.onClick} style={{width: 200}}>发布</Button>
                         </div>
-                    </If>
+                    </div>
                 </Form>
             </div>
         )
