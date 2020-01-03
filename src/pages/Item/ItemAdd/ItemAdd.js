@@ -104,7 +104,9 @@ export default class ItemAdd extends PureComponent {
     }
 
     showCategoryNames = () => {
-        return this.state.categoryNames.map((name) => <Breadcrumb.Item>{name}</Breadcrumb.Item>)
+        if (this.state.categoryNames.length > 1) {
+            return this.state.categoryNames.map((name) => <Breadcrumb.Item>{name}</Breadcrumb.Item>)
+        }
     }
     onSelect = (value, node, extra) => {
         //先重置数据
@@ -209,8 +211,10 @@ export default class ItemAdd extends PureComponent {
     showSkuItem = () => {
         let arr = []
         if (this.state.specAll.specialSpec) {
-            this.state.specAll.specialSpec.map(tmp => arr.push(<FormItem status="disabled" label={tmp.label} name={tmp.name} defaultMinWidth={false}><Input
-                style={{width: 120}}/></FormItem>))
+            this.state.specAll.specialSpec.map(tmp => {
+                arr.push(<FormItem status="disabled" label={tmp.label} name={tmp.name}
+                                   defaultMinWidth={false}><Input style={{width: 120}}/></FormItem>)
+            })
         }
         arr.push(<FormItem label='商品价格' name="price" defaultMinWidth={false}><InputNumber
             style={{width: 120}}/></FormItem>)
@@ -325,6 +329,13 @@ export default class ItemAdd extends PureComponent {
                         }
                     })
                 }
+            } else {
+                let data = {}
+                data.price = price
+                data.stock = stock
+                data.saleable = 1
+                skuItemData.dataSource.push(data)
+                this.core.setValue('skuItem', skuItemData)
             }
             if (skuItemData.dataSource.length > 0) {
                 this.core.setValue('skuItem', skuItemData)
