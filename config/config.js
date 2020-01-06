@@ -32,6 +32,7 @@ export default {
                 {path: '/easySpecParamList', component: './EasySpecification/EasySpecParamList'},
                 {path: '/itemList', component: './Item/ItemList'},
                 {path: '/itemAdd', component: './Item/ItemAdd/ItemAdd'},
+                {path: '/itemEdit', component: './Item/ItemEdit/ItemEdit'},
                 {path: '/ImageRichText', component: './ImageRichText/ImageRichText'},
             ]
         }
