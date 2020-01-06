@@ -152,41 +152,6 @@ export default class ItemAdd extends PureComponent {
         })
     }
 
-    onClick = () => {
-        console.log(this.core.getValues())
-        console.log(this.core2.getValues())
-        console.log(JSON.stringify(this.core2.getValues()));
-        return
-        this.core.validate((err) => {
-            if (!err) {
-                //校验商品图片
-                if (this.state.fileList.length === 0) {
-                    message.warning('请上传商品图片')
-                    return
-                }
-                //准备附件数据
-                const formData = new FormData();
-                this.state.fileList.forEach((file) => {
-                    formData.append('files', file)
-                })
-                //商品描述数据
-                formData.append('description', this.state.outputHTML)
-                //表单数据
-                formData.append("form", JSON.stringify(this.core.getValues()))
-                //通用规格
-                formData.append('generic', JSON.stringify(this.core2.getValues()))
-                //异步请求
-                request.post(spuPath + '/add', {data: formData}).then(res => {
-                    if (res && res.code === 1) {
-                        message.success("操作成功")
-                    } else {
-                        message.error("操作失败")
-                    }
-                })
-            }
-        })
-    }
-
     showGenericSpec = () => {
         let arr = []
         if (this.state.specAll.genericSpec) {
@@ -380,6 +345,42 @@ export default class ItemAdd extends PureComponent {
         console.log("aa");
     }
 
+    onClick = () => {
+        this.core.validate((err) => {
+            if (!err) {
+                //校验商品图片
+                if (this.state.fileList.length === 0) {
+                    message.warning('请上传商品图片')
+                    return
+                }
+                //商品图片的数据
+                const formData = new FormData();
+                this.state.fileList.forEach((file) => {
+                    formData.append('images', file)
+                })
+                //商品描述的数据
+                formData.append('description', this.state.outputHTML)
+                console.log("description");
+                console.log(this.state.outputHTML);
+                //商品表单的数据
+                formData.append("form", JSON.stringify(this.core.getValues()))
+                console.log("form");
+                console.log(JSON.stringify(this.core.getValues()));
+                //通用规格
+                formData.append('genericSpec', JSON.stringify(this.core2.getValues()))
+                console.log("genericSpec");
+                console.log(JSON.stringify(this.core2.getValues()));
+                //异步请求
+                request.post(spuPath + '/add', {data: formData}).then(res => {
+                    if (res && res.code === 1) {
+                        message.success("操作成功")
+                    } else {
+                        message.error("操作失败")
+                    }
+                })
+            }
+        })
+    }
 
     render() {
         //editor
@@ -445,7 +446,7 @@ export default class ItemAdd extends PureComponent {
                                 <Input.TextArea style={{width: 400}}/>
                             </FormItem>
                         </Card>
-                        <Card title='商品的描述' style={{marginTop: 10}}>
+                        <Card title='商品描述' style={{marginTop: 10}}>
                             <div className="editor-wrapper">
                                 <BraftEditor
                                     value={this.state.editorState}
@@ -465,7 +466,7 @@ export default class ItemAdd extends PureComponent {
                             {this.state.specAll ? this.showSpecialSpec() : ''}
                         </Card>
                         <Card title='商品的其他属性' style={{marginTop: 10}}>
-                            <FormItem name="speSellerDefine">
+                            <FormItem name="specSellerDefine">
                                 <SelectInlineRepeater locale='zh' selectMode="multiple" multiple>
                                     <FormItem label='属性名称' name="name"><Input/></FormItem>
                                     <FormItem label='属性值' name="value"><Input/></FormItem>
