@@ -110,26 +110,10 @@ export default class ItemEdit extends PureComponent {
                     categoryId: res.data.categoryId,
                     genericSpecDisplay: ''
                 })
-                //反显表单数据,反显tmpStock时发生错误
-                this.setState({tmpStock: res.data.tmpStock})
-                // this.core.setValue('tmpStock',res.data.tmpStock)
-                delete res.data.tmpStock
+                //反显表单数据
                 this.core.setValues({...res.data})
-                /*                                this.core.setValues({
-                                                    'categoryId': res.data.categoryId,
-                                                    'brandId': res.data.brandId,
-                                                    'title': res.data.title,
-                                                    'subTitle': res.data.subTitle,
-                                                    'packingList': res.data.packingList,
-                                                    'afterService': res.data.afterService,
-                                                    'specSellerDefine': res.data.specSellerDefine,
-                                                    'tmpPrice': res.data.tmpPrice
-                                                })*/
             }
         })
-    }
-    componentDidMount() {
-        // this.core.setValue('tmpStock',1111)
     }
 
     showCategoryNames = () => {
@@ -509,11 +493,15 @@ export default class ItemEdit extends PureComponent {
                             <If when={(values) => {
                                 return values.tmpPrice !== null && values.tmpStock !== null
                             }}>
-                                <FormItem label={<b style={{color: 'red'}}>* 库存商品</b>} name="skuItem" required={true}>
-                                    <SelectInlineRepeater locale='zh' selectMode="multiple" multiple>
-                                        {this.state.specAll ? this.showSkuItem() : ''}
-                                    </SelectInlineRepeater>
-                                </FormItem>
+                                {
+                                    this.state.specAll ?
+                                        <FormItem label={<b style={{color: 'red'}}>* 库存商品</b>} name="skuItem"
+                                                  required={true}>
+                                            <SelectInlineRepeater locale='zh' selectMode="multiple" multiple>
+                                                {this.state.specAll ? this.showSkuItem() : ''}
+                                            </SelectInlineRepeater>
+                                        </FormItem> : ''
+                                }
                             </If>
                         </Card>
                         <div style={{marginTop: 20}}>
