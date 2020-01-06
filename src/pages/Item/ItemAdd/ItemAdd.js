@@ -132,12 +132,6 @@ export default class ItemAdd extends PureComponent {
                 this.setState({categoryNames: res.data})
             }
         })
-        //根据categoryId获取商品类目，从而判断出显示哪个商品规格
-        request.get(spuPath + '/specType?categoryId=' + categoryId).then(res => {
-            if (res && res.code === 1) {
-                this.setState({specType: res.data})
-            }
-        })
         //根据categoryId获取品牌
         request.get(brandPath + '/selectOptions?categoryId=' + categoryId).then(res => {
             if (res && res.code === 1) {

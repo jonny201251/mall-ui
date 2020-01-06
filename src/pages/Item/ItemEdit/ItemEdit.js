@@ -100,6 +100,36 @@ export default class ItemEdit extends PureComponent {
                 this.setState({treeSelectData: res.data})
             }
         })
+        //根据categoryId获取商品数据
+        request.get(spuPath + '/getById?id=' + this.props.location.query.spuId).then(res => {
+            if (res && res.code === 1) {
+                //取出 表单的基础数据
+                this.formBaseData(res.data.categoryId)
+                //
+                this.setState({
+                    categoryId: res.data.categoryId,
+                    genericSpecDisplay: ''
+                })
+                //反显表单数据,反显tmpStock时发生错误
+                this.setState({tmpStock: res.data.tmpStock})
+                // this.core.setValue('tmpStock',res.data.tmpStock)
+                delete res.data.tmpStock
+                this.core.setValues({...res.data})
+                /*                                this.core.setValues({
+                                                    'categoryId': res.data.categoryId,
+                                                    'brandId': res.data.brandId,
+                                                    'title': res.data.title,
+                                                    'subTitle': res.data.subTitle,
+                                                    'packingList': res.data.packingList,
+                                                    'afterService': res.data.afterService,
+                                                    'specSellerDefine': res.data.specSellerDefine,
+                                                    'tmpPrice': res.data.tmpPrice
+                                                })*/
+            }
+        })
+    }
+    componentDidMount() {
+        // this.core.setValue('tmpStock',1111)
     }
 
     showCategoryNames = () => {
@@ -126,16 +156,14 @@ export default class ItemEdit extends PureComponent {
         let categoryId = value
         this.setState({categoryId})
         // let title = node.props.title
+        this.formBaseData(categoryId)
+    }
+
+    formBaseData = (categoryId) => {
         //根据categoryId获取所有父级节点的名称
         request.get(categoryPath + '/categoryNames?categoryId=' + categoryId).then(res => {
             if (res && res.code === 1) {
                 this.setState({categoryNames: res.data})
-            }
-        })
-        //根据categoryId获取商品类目，从而判断出显示哪个商品规格
-        request.get(spuPath + '/specType?categoryId=' + categoryId).then(res => {
-            if (res && res.code === 1) {
-                this.setState({specType: res.data})
             }
         })
         //根据categoryId获取品牌
