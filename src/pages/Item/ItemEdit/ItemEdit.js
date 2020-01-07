@@ -4,11 +4,12 @@ import Form, {FormCore, FormItem, If} from 'noform'
 import {Input, Radio, Select, TreeSelect, Upload} from 'nowrapper/lib/antd'
 import {InlineRepeater, Selectify} from 'nowrapper/lib/antd/repeater'
 import request from '../../../utils/request'
-import uploadStyle from './upload.less'
 //editor
 import 'braft-editor/dist/index.css'
 import BraftEditor from 'braft-editor'
 import {ContentUtils} from 'braft-utils'
+//图片组件
+import SubImageUpload from "./SubImageUpload"
 
 const SelectInlineRepeater = Selectify(InlineRepeater)
 
@@ -38,6 +39,8 @@ export default class ItemEdit extends PureComponent {
         //
         genericSpecDisplay: 'none',
         specialSpecDisplay: 'none',
+        //是否生成skuItem的标志位
+        count: {i: 1}
     }
 
     constructor(props) {
@@ -47,11 +50,11 @@ export default class ItemEdit extends PureComponent {
     }
 
     //商品图片
-    beforeUpload = file => {
+    putFileToState = file => {
         this.setState({fileList: [...this.state.fileList, file]})
         return false
     }
-    onRemove = file => {
+    removeFileFromState = file => {
         this.setState(state => {
             const index = state.fileList.indexOf(file);
             const newFileList = state.fileList.slice();
@@ -108,10 +111,35 @@ export default class ItemEdit extends PureComponent {
                 //
                 this.setState({
                     categoryId: res.data.categoryId,
-                    genericSpecDisplay: ''
+                    genericSpecDisplay: '',
+                    images: res.data.images
                 })
                 //反显表单数据
                 this.core.setValues({...res.data})
+                //商品描述
+                this.setState({
+                    editorState: BraftEditor.createEditorState(res.data.description),
+                })
+                //商品的通用属性
+                let genericSpec = JSON.parse(res.data.genericSpec)
+                this.core2.setValues({...genericSpec})
+                //商品的特有属性
+                let specialSpec = JSON.parse(res.data.specialSpec)
+                for (let key in specialSpec) {
+                    let values = specialSpec[key]
+                    let dataSource1 = []
+                    values.map(value => {
+                        dataSource1.push({value})
+                    })
+                    this.core.setValue(key, {dataSource: dataSource1})
+                }
+                //库存商品的数据
+                let skuList = res.data.skuList
+                let dataSource2 = []
+                skuList.map(sku => {
+                    dataSource2.push({...sku, ...JSON.parse(sku.skuSpec)})
+                })
+                this.core.setValue('skuItem', {dataSource: dataSource2})
             }
         })
     }
@@ -126,9 +154,6 @@ export default class ItemEdit extends PureComponent {
         this.core.reset()
         this.core2.reset()
         this.setState({
-            //商品图片
-            fileList: [],
-            defaultFileList: [],
             //editor
             editorState: BraftEditor.createEditorState(''),
             //
@@ -206,7 +231,8 @@ export default class ItemEdit extends PureComponent {
     }
 
     skuChange = () => {
-        if (this.core.getValue('tmpPrice') != null && this.core.getValue('tmpStock') != null) {
+        console.log('skuChange');
+        if ((this.state.count.i++) > 2 && this.core.getValue('tmpPrice') != null && this.core.getValue('tmpStock') != null) {
             this.generateSkuItem()
         }
     }
@@ -441,16 +467,9 @@ export default class ItemEdit extends PureComponent {
                                 <Input style={{width: 400}}/>
                             </FormItem>
                             <FormItem label="商品图片" required={true}/>
-                            <div style={{width: 200}}>
-                                <Upload.Dragger listType='picture'
-                                                beforeUpload={this.beforeUpload} onRemove={this.onRemove}
-                                                className={uploadStyle.upload}
-                                                defaultFileList={this.state.defaultFileList}>
-                                    <p className="ant-upload-drag-icon">
-                                        <Icon type="plus"/>
-                                    </p>
-                                </Upload.Dragger>
-                            </div>
+                            {this.state.images ?
+                                <SubImageUpload images={this.state.images} putFileToState={this.putFileToState}
+                                                removeFileFromState={this.removeFileFromState}/> : ''}
                             <FormItem label="包装清单" name="packingList" defaultMinWidth={false}>
                                 <Input.TextArea style={{width: 400}}/>
                             </FormItem>
