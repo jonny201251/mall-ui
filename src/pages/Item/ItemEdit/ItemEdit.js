@@ -118,7 +118,18 @@ export default class ItemEdit extends PureComponent {
                     images: res.data.images
                 })
                 //反显表单数据
-                this.core.setValues({...res.data})
+                this.core.setValues({
+                    'id':res.data.id,
+                    'categoryId': res.data.categoryId,
+                    'brandId': res.data.brandId,
+                    'title': res.data.title,
+                    'subTitle': res.data.subTitle,
+                    'packingList': res.data.packingList,
+                    'afterService': res.data.afterService,
+                    'specSellerDefine': res.data.specSellerDefine,
+                    'tmpPrice': res.data.tmpPrice,
+                    'tmpStock': res.data.tmpStock
+                })
                 //商品描述
                 this.setState({
                     editorState: BraftEditor.createEditorState(res.data.description),
