@@ -31,15 +31,15 @@ class AdminLayout extends React.Component {
                            style={{minHeight: '100vh', color: 'white'}}>
                         <div className={styles.logo}/>
                         <Menu theme="dark" mode="inline" defaultSelectedKeys={['sub1']}
-                              defaultOpenKeys={['sub1', 'sub2']}>
+                              defaultOpenKeys={['sub1', 'sub2','sub3']}>
                             <SubMenu
                                 key="sub1"
                                 title={<span><Icon type="credit-card"/><span>商品管理</span></span>}
                             >
                                 <Menu.Item key="3"><Link to="/categoryList">商品类目</Link></Menu.Item>
                                 <Menu.Item key="4"><Link to="/brandList">品牌管理</Link></Menu.Item>
-                                <Menu.Item key="8"><Link to="/itemList">商品列表</Link></Menu.Item>
                                 <Menu.Item key="99"><Link to="/itemAdd">发布商品</Link></Menu.Item>
+                                <Menu.Item key="8"><Link to="/itemList">商品列表</Link></Menu.Item>
                             </SubMenu>
                             <SubMenu
                                 key="sub2"
@@ -53,7 +53,7 @@ class AdminLayout extends React.Component {
                                     <Menu.Item key="6"><Link to="/complexSpecParamList">规格参数</Link></Menu.Item>
                                 </SubMenu>
                                 <Menu.Item key="7"><Link to="/easySpecParamList">简单规格</Link></Menu.Item>
-                                <Menu.Item key="80"><Link to="/ImageRichText">ImageRichText</Link></Menu.Item>
+                                {/*<Menu.Item key="80"><Link to="/ImageRichText">ImageRichText</Link></Menu.Item>*/}
                             </SubMenu>
                         </Menu>
                     </Sider>

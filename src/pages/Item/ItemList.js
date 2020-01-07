@@ -77,11 +77,11 @@ class ItemList extends PureComponent {
                     <Filter.Item label="username" name="username"><Input/></Filter.Item>
                     <Filter.Item label="age" name="age"><Input/></Filter.Item>
                 </Filter>
-                <div className={classNames(styles.marginTop10, styles.marginBottom10)}>
+{/*                <div className={classNames(styles.marginTop10, styles.marginBottom10)}>
                     <Button icon="plus" type="primary" onClick={() => this.handleOperator('create')}>发布商品</Button>
                     <Button icon="delete" type="primary" onClick={() => this.handleOperator('delete')}
                             className={styles.marginLeft20}>删除</Button>
-                </div>
+                </div>*/}
                 <Table onRow={record => {
                     return {
                         onClick: () => this.clickOperation('onClick', record),

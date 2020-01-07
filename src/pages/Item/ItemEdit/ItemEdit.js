@@ -146,28 +146,44 @@ export default class ItemEdit extends PureComponent {
                 let genericSpec = JSON.parse(res.data.genericSpec)
                 this.core2.setValues({...genericSpec})
                 //商品的特有属性
-                let specialSpec = JSON.parse(res.data.specialSpec)
-                for (let key in specialSpec) {
-                    let values = specialSpec[key]
-                    let dataSource1 = []
-                    values.map(value => {
-                        dataSource1.push({value})
-                    })
-                    this.core.setValue(key, {dataSource: dataSource1})
+                if ("complexSpecHave" === res.data.type) {
+                    let specialSpec = JSON.parse(res.data.specialSpec)
+                    for (let key in specialSpec) {
+                        let values = specialSpec[key]
+                        let dataSource1 = []
+                        values.map(value => {
+                            dataSource1.push({value})
+                        })
+                        this.core.setValue(key, {dataSource: dataSource1})
+                    }
                 }
                 //库存商品的数据
                 let skuList = res.data.skuList
                 let dataSource2 = []
-                skuList.map(sku => {
-                    dataSource2.push({
-                        price: sku.price,
-                        stock: sku.stock,
-                        skuCode: sku.skuCode,
-                        saleable: sku.saleable,
-                        indexes: sku.indexes,
-                        skuSpec: sku.skuSpec, ...JSON.parse(sku.skuSpec)
+                try {
+                    skuList.map(sku => {
+                        dataSource2.push({
+                            price: sku.price,
+                            stock: sku.stock,
+                            skuCode: sku.skuCode,
+                            saleable: sku.saleable,
+                            indexes: sku.indexes,
+                            skuSpec: sku.skuSpec,
+                            ...JSON.parse(sku.skuSpec)
+                        })
                     })
-                })
+                } catch (e) {
+                    skuList.map(sku => {
+                        dataSource2.push({
+                            price: sku.price,
+                            stock: sku.stock,
+                            skuCode: sku.skuCode,
+                            saleable: sku.saleable,
+                            indexes: sku.indexes,
+                            skuSpec: sku.skuSpec
+                        })
+                    })
+                }
                 this.core.setValue('skuItem', {dataSource: dataSource2})
             }
         })
@@ -428,7 +444,7 @@ export default class ItemEdit extends PureComponent {
                     if (file.name) {
                         formData.append('newImages', file)
                     } else {
-                        oldImages.push(file.url.replace(hostPath,''))
+                        oldImages.push(file.url.replace(hostPath, ''))
                     }
                 })
                 formData.append('oldImages', oldImages)
