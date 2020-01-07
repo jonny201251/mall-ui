@@ -66,7 +66,7 @@ class ItemList extends PureComponent {
     renderOperation = (text, record, idx) => {
         return (<div>
             <a href={hostName + "/itemEdit?spuId=" + record.id}>编辑</a>
-            <a style={{paddingLeft: 10}} href={hostPath + "/item.html?spuId=" + record.id} target={'blank'}>查看</a>
+            <a style={{paddingLeft: 10}} href={hostPath + "/item.html?id=" + record.id} target={'blank'}>查看</a>
         </div>)
     }
 
@@ -77,7 +77,7 @@ class ItemList extends PureComponent {
                     <Filter.Item label="username" name="username"><Input/></Filter.Item>
                     <Filter.Item label="age" name="age"><Input/></Filter.Item>
                 </Filter>
-{/*                <div className={classNames(styles.marginTop10, styles.marginBottom10)}>
+                {/*                <div className={classNames(styles.marginTop10, styles.marginBottom10)}>
                     <Button icon="plus" type="primary" onClick={() => this.handleOperator('create')}>发布商品</Button>
                     <Button icon="delete" type="primary" onClick={() => this.handleOperator('delete')}
                             className={styles.marginLeft20}>删除</Button>
