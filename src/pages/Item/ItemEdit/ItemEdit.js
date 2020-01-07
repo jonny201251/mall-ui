@@ -100,6 +100,7 @@ export default class ItemEdit extends PureComponent {
     }
 
     componentWillMount() {
+        this.core.setStatus('categoryId','disabled')
         //取出 商品类目
         request.get(categoryPath + '/treeSelect').then(res => {
             if (res && res.code === 1) {
@@ -119,7 +120,7 @@ export default class ItemEdit extends PureComponent {
                 })
                 //反显表单数据
                 this.core.setValues({
-                    'id':res.data.id,
+                    'id': res.data.id,
                     'categoryId': res.data.categoryId,
                     'brandId': res.data.brandId,
                     'title': res.data.title,
@@ -130,6 +131,15 @@ export default class ItemEdit extends PureComponent {
                     'tmpPrice': res.data.tmpPrice,
                     'tmpStock': res.data.tmpStock
                 })
+                //specSellerDefine
+                if (res.data.specSellerDefine.dataSource.length > 0) {
+                    let specSellerDefine = []
+                    specSellerDefine = res.data.specSellerDefine.dataSource.map((tmp) => ({
+                        name: tmp.name, value: tmp.value
+                    }))
+                    console.log(specSellerDefine);
+                    this.core.setValue('specSellerDefine', {dataSource: specSellerDefine})
+                }
                 //商品描述
                 this.setState({
                     editorState: BraftEditor.createEditorState(res.data.description),
@@ -151,7 +161,14 @@ export default class ItemEdit extends PureComponent {
                 let skuList = res.data.skuList
                 let dataSource2 = []
                 skuList.map(sku => {
-                    dataSource2.push({...sku, ...JSON.parse(sku.skuSpec)})
+                    dataSource2.push({
+                        price: sku.price,
+                        stock: sku.stock,
+                        skuCode: sku.skuCode,
+                        saleable: sku.saleable,
+                        indexes: sku.indexes,
+                        skuSpec: sku.skuSpec, ...JSON.parse(sku.skuSpec)
+                    })
                 })
                 this.core.setValue('skuItem', {dataSource: dataSource2})
             }
@@ -400,6 +417,7 @@ export default class ItemEdit extends PureComponent {
     onClick = () => {
         this.core.validate((err) => {
             if (!err) {
+                console.log(this.state.fileList);
                 //校验商品图片
                 if (this.state.fileList.length === 0) {
                     message.warning('请上传商品图片')
@@ -412,10 +430,11 @@ export default class ItemEdit extends PureComponent {
                     if (file.name) {
                         formData.append('newImages', file)
                     } else {
-                        oldImages.push(file.url)
+                        oldImages.push(file.url.replace(hostPath,''))
                     }
                 })
                 formData.append('oldImages', oldImages)
+                console.log(oldImages);
                 //商品描述的数据
                 formData.append('description', this.state.outputHTML)
                 console.log("description");
