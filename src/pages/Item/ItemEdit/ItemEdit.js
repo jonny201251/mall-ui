@@ -100,7 +100,6 @@ export default class ItemEdit extends PureComponent {
     }
 
     componentWillMount() {
-        this.core.setStatus('categoryId','disabled')
         //取出 商品类目
         request.get(categoryPath + '/treeSelect').then(res => {
             if (res && res.code === 1) {
@@ -137,7 +136,6 @@ export default class ItemEdit extends PureComponent {
                     specSellerDefine = res.data.specSellerDefine.dataSource.map((tmp) => ({
                         name: tmp.name, value: tmp.value
                     }))
-                    console.log(specSellerDefine);
                     this.core.setValue('specSellerDefine', {dataSource: specSellerDefine})
                 }
                 //商品描述
@@ -484,7 +482,7 @@ export default class ItemEdit extends PureComponent {
                 <Form core={this.core} direction="vertical-top">
                     <FormItem style={{display: 'none'}} name="id"><Input/></FormItem>
                     <Card>
-                        <FormItem label="商品的类目" name="categoryId" required={true}>
+                        <FormItem status="disabled" label="商品的类目" name="categoryId" required={true}>
                             <TreeSelect treeData={this.state.treeSelectData} treeDefaultExpandAll
                                         onSelect={(value, node, extra,) => this.onSelect(value, node, extra)}/>
                         </FormItem>
