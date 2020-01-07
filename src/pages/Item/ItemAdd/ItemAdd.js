@@ -10,6 +10,8 @@ import 'braft-editor/dist/index.css'
 import BraftEditor from 'braft-editor'
 import {ContentUtils} from 'braft-utils'
 
+import router from "umi/router"
+
 const SelectInlineRepeater = Selectify(InlineRepeater)
 
 const validate = {
@@ -354,20 +356,15 @@ export default class ItemAdd extends PureComponent {
                 })
                 //商品描述的数据
                 formData.append('description', this.state.outputHTML)
-                console.log("description");
-                console.log(this.state.outputHTML);
                 //商品表单的数据
                 formData.append("form", JSON.stringify(this.core.getValues()))
-                console.log("form");
-                console.log(JSON.stringify(this.core.getValues()));
                 //通用规格
                 formData.append('genericSpec', JSON.stringify(this.core2.getValues()))
-                console.log("genericSpec");
-                console.log(JSON.stringify(this.core2.getValues()));
                 //异步请求
                 request.post(spuPath + '/add', {data: formData}).then(res => {
                     if (res && res.code === 1) {
                         message.success("操作成功")
+                        router.push('/itemList')
                     } else {
                         message.error("操作失败")
                     }

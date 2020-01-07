@@ -11,6 +11,8 @@ import {ContentUtils} from 'braft-utils'
 //图片组件
 import SubImageUpload from "./SubImageUpload"
 
+import router from "umi/router"
+
 const SelectInlineRepeater = Selectify(InlineRepeater)
 
 const validate = {
@@ -431,7 +433,6 @@ export default class ItemEdit extends PureComponent {
     onClick = () => {
         this.core.validate((err) => {
             if (!err) {
-                console.log(this.state.fileList);
                 //校验商品图片
                 if (this.state.fileList.length === 0) {
                     message.warning('请上传商品图片')
@@ -448,23 +449,17 @@ export default class ItemEdit extends PureComponent {
                     }
                 })
                 formData.append('oldImages', oldImages)
-                console.log(oldImages);
                 //商品描述的数据
                 formData.append('description', this.state.outputHTML)
-                console.log("description");
-                console.log(this.state.outputHTML);
                 //商品表单的数据
                 formData.append("form", JSON.stringify(this.core.getValues()))
-                console.log("form");
-                console.log(JSON.stringify(this.core.getValues()));
                 //通用规格
                 formData.append('genericSpec', JSON.stringify(this.core2.getValues()))
-                console.log("genericSpec");
-                console.log(JSON.stringify(this.core2.getValues()));
                 //异步请求
                 request.post(spuPath + '/edit', {data: formData}).then(res => {
                     if (res && res.code === 1) {
                         message.success("操作成功")
+                        router.push('/itemList')
                     } else {
                         message.error("操作失败")
                     }
