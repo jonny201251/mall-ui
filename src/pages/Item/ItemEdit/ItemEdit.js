@@ -50,6 +50,9 @@ export default class ItemEdit extends PureComponent {
     }
 
     //商品图片
+    initFileToState = (fileList) => {
+        this.setState({fileList})
+    }
     putFileToState = file => {
         this.setState({fileList: [...this.state.fileList, file]})
         return false
@@ -392,10 +395,16 @@ export default class ItemEdit extends PureComponent {
                     return
                 }
                 //商品图片的数据
+                let oldImages = []
                 const formData = new FormData();
                 this.state.fileList.forEach((file) => {
-                    formData.append('images', file)
+                    if (file.name) {
+                        formData.append('newImages', file)
+                    } else {
+                        oldImages.push(file.url)
+                    }
                 })
+                formData.append('oldImages', oldImages)
                 //商品描述的数据
                 formData.append('description', this.state.outputHTML)
                 console.log("description");
@@ -409,7 +418,7 @@ export default class ItemEdit extends PureComponent {
                 console.log("genericSpec");
                 console.log(JSON.stringify(this.core2.getValues()));
                 //异步请求
-                request.post(spuPath + '/add', {data: formData}).then(res => {
+                request.post(spuPath + '/edit', {data: formData}).then(res => {
                     if (res && res.code === 1) {
                         message.success("操作成功")
                     } else {
@@ -469,7 +478,8 @@ export default class ItemEdit extends PureComponent {
                             <FormItem label="商品图片" required={true}/>
                             {this.state.images ?
                                 <SubImageUpload images={this.state.images} putFileToState={this.putFileToState}
-                                                removeFileFromState={this.removeFileFromState}/> : ''}
+                                                removeFileFromState={this.removeFileFromState}
+                                                initFileToState={this.initFileToState}/> : ''}
                             <FormItem label="包装清单" name="packingList" defaultMinWidth={false}>
                                 <Input.TextArea style={{width: 400}}/>
                             </FormItem>

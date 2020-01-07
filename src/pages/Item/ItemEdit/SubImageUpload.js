@@ -26,6 +26,7 @@ export default class SubImageUpload extends PureComponent {
             status: 'done',
             url: hostPath + img
         }))
+        this.props.initFileToState(fileList)
         this.setState({defaultFileList: fileList})
     }
 
