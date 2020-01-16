@@ -1,9 +1,7 @@
 import React, {PureComponent} from 'react'
-import {Modal, message} from 'antd'
-import List, {Filter, Table, Pagination} from 'nolist/lib/wrapper/antd'
-import {Input, Dialog, Button} from 'nowrapper/lib/antd'
-import classNames from 'classnames'
-import styles from '../common.less'
+import {message, Modal} from 'antd'
+import List, {Filter, Pagination, Table} from 'nolist/lib/wrapper/antd'
+import {Dialog, Input} from 'nowrapper/lib/antd'
 
 import request from '../../utils/request'
 import router from 'umi/router'

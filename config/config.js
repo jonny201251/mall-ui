@@ -34,6 +34,7 @@ export default {
                 {path: '/itemAdd', component: './Item/ItemAdd/ItemAdd'},
                 {path: '/itemEdit', component: './Item/ItemEdit/ItemEdit'},
                 {path: '/ImageRichText', component: './ImageRichText/ImageRichText'},
+                {path: '/orderList', component: './Order/OrderList'},
             ]
         }
     ],

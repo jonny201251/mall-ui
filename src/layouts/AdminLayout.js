@@ -31,7 +31,7 @@ class AdminLayout extends React.Component {
                            style={{minHeight: '100vh', color: 'white'}}>
                         <div className={styles.logo}/>
                         <Menu theme="dark" mode="inline" defaultSelectedKeys={['sub1']}
-                              defaultOpenKeys={['sub1', 'sub2','sub3']}>
+                              defaultOpenKeys={['sub11', 'sub23', 'sub33']}>
                             <SubMenu
                                 key="sub1"
                                 title={<span><Icon type="credit-card"/><span>商品管理</span></span>}
@@ -54,6 +54,12 @@ class AdminLayout extends React.Component {
                                 </SubMenu>
                                 <Menu.Item key="7"><Link to="/easySpecParamList">简单规格</Link></Menu.Item>
                                 {/*<Menu.Item key="80"><Link to="/ImageRichText">ImageRichText</Link></Menu.Item>*/}
+                            </SubMenu>
+                            <SubMenu
+                                key="sub3"
+                                title={<span><Icon type="money-collect"/><span>交易管理</span></span>}
+                            >
+                                <Menu.Item key="30"><Link to="/orderList">订单管理</Link></Menu.Item>
                             </SubMenu>
                         </Menu>
                     </Sider>
