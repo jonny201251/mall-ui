@@ -133,7 +133,7 @@ export default class ItemEdit extends PureComponent {
                     'tmpStock': res.data.tmpStock
                 })
                 //specSellerDefine
-                if (res.data.specSellerDefine.dataSource.length > 0) {
+                if (res.data.specSellerDefine && res.data.specSellerDefine.dataSource.length > 0) {
                     let specSellerDefine = []
                     specSellerDefine = res.data.specSellerDefine.dataSource.map((tmp) => ({
                         name: tmp.name, value: tmp.value
