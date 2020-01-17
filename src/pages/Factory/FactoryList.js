@@ -112,8 +112,6 @@ class FactoryList extends PureComponent {
                     <Button icon="plus" type="primary" onClick={() => this.handleOperator('create')}>新增</Button>
                     <Button icon="edit" type="primary" onClick={() => this.handleOperator('edit')}
                             className={styles.marginLeft20}>编辑</Button>
-                    <Button icon="search" type="primary" onClick={() => this.handleOperator('view')}
-                            className={styles.marginLeft20}>浏览</Button>
                 </div>
                 <Table onRow={record => {
                     return {
