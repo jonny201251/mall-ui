@@ -29,7 +29,7 @@ class AdminLayout extends React.Component {
                 <Layout>
                     <Sider trigger={null} collapsible collapsed={this.state.collapsed} width={256}
                            style={{minHeight: '100vh', color: 'white'}}>
-                        <div className={styles.logo}/>
+                        <div className={styles.logo}>职业健康商城</div>
                         <Menu theme="dark" mode="inline" defaultSelectedKeys={['sub1']}
                               defaultOpenKeys={['sub11', 'sub23', 'sub33']}>
                             <SubMenu
