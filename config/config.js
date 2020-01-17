@@ -21,6 +21,13 @@ export default {
     ],
     routes: [
         {
+            path: '/user',
+            component: '../layouts/UserLayout',
+            routes: [
+                {path: '/user/login', component: './Login/Login'}
+            ]
+        },
+        {
             path: '/',
             component: '../layouts/AdminLayout',
             routes: [
