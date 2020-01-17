@@ -29,7 +29,6 @@ class FactoryUserForm extends PureComponent {
             }
         })
         let {type, record} = this.props.option
-        console.log(record);
         if ('edit' === type || 'view' === type) {
             this.core.setValues({...record})
             this.core.setGlobalStatus('edit' === type ? type : 'preview')
@@ -39,7 +38,6 @@ class FactoryUserForm extends PureComponent {
     render() {
         return (
             <Form core={this.core} layout={{label: 8, control: 16}} direction="vertical-top">
-                <FormItem style={{display: 'none'}} name="id"><Input/></FormItem>
                 <FormItem label="分厂名称" name="companyId" required={true}>
                     <Select options={this.state.selectData}/>
                 </FormItem>
