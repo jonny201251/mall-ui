@@ -56,10 +56,18 @@ class AdminLayout extends React.Component {
                                 {/*<Menu.Item key="80"><Link to="/ImageRichText">ImageRichText</Link></Menu.Item>*/}
                             </SubMenu>
                             <SubMenu
-                                key="sub3"
+                                key="sub4"
                                 title={<span><Icon type="money-collect"/><span>交易管理</span></span>}
                             >
                                 <Menu.Item key="30"><Link to="/orderList">订单管理</Link></Menu.Item>
+                            </SubMenu>
+                            <SubMenu
+                                key="sub5"
+                                title={<span><Icon type="money-collect"/><span>159厂信息</span></span>}
+                            >
+                                <Menu.Item key="40"><Link to="/factoryList">分厂管理</Link></Menu.Item>
+                                <Menu.Item key="50"><Link to="/factoryUserList">分厂人员维护</Link></Menu.Item>
+                                <Menu.Item key="30"><Link to="/factoryMoneyLimitList">下单金额限制</Link></Menu.Item>
                             </SubMenu>
                         </Menu>
                     </Sider>
