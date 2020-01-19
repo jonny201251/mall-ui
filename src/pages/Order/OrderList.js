@@ -1,16 +1,17 @@
 import React, {PureComponent} from 'react'
-import {Button, Descriptions, Pagination} from 'antd';
+import {Button, Descriptions, Pagination} from 'antd'
+import router from 'umi/router'
+import Link from 'umi/link'
 
 import request from '../../utils/request'
 
-let globalList
 const orderPath = '/mall/order'
 const hostPath = 'http://localhost:8082/mall'
 
 class OrderList extends PureComponent {
     state = {
         currentPage: 1,
-        pageSize: 2
+        pageSize: 5
     }
 
     getOrderData = (currentPage) => {
@@ -38,7 +39,7 @@ class OrderList extends PureComponent {
                             <span style={{paddingLeft: 15}}>下单时间：{order.createTime}</span>
                             <span style={{paddingLeft: 15}}>订单总额：￥{order.totalPay}</span>
                             <span style={{paddingLeft: 15}}>状态：{order.orderStatus.status === 0 ? '暂未付款' : '交易关闭'}</span>
-                            <Button type="link" size="small" style={{paddingLeft: 15}}>查看订单</Button>
+                            <Link to={"/orderDetail?orderId="+order.orderId} style={{paddingLeft: 15}} >查看订单</Link>
                             <Button type="link" size="small" style={{paddingLeft: 5}}>取消订单</Button>
                         </div>
                         <Descriptions size="small" column={6}>
@@ -52,7 +53,7 @@ class OrderList extends PureComponent {
                             <span style={{paddingLeft: 15}}>下单时间：{order.createTime}</span>
                             <span style={{paddingLeft: 15}}>订单总额：￥{order.totalPay}</span>
                             <span style={{paddingLeft: 15}}>状态：{order.orderStatus.status === 0 ? '暂未付款' : '交易关闭'}</span>
-                            <Button type="link" size="small" style={{paddingLeft: 15}}>查看订单</Button>
+                            <Link to={"/orderDetail?orderId="+order.orderId} style={{paddingLeft: 15}} >查看订单</Link>
                             <Button type="link" size="small" style={{paddingLeft: 5}}>取消订单</Button>
                         </div>
                         <Descriptions size="small" column={6}>
@@ -65,7 +66,6 @@ class OrderList extends PureComponent {
     }
 
     showItem = (items) => {
-        console.log(items);
         let arr = []
         arr.push(<Descriptions.Item span={4}><span style={{paddingLeft: 15}}>商品信息</span></Descriptions.Item>)
         arr.push(<Descriptions.Item>{"价格"}</Descriptions.Item>)

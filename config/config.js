@@ -42,6 +42,7 @@ export default {
                 {path: '/itemEdit', component: './Item/ItemEdit/ItemEdit'},
                 {path: '/ImageRichText', component: './ImageRichText/ImageRichText'},
                 {path: '/orderList', component: './Order/OrderList'},
+                {path: '/orderDetail', component: './Order/OrderDetail'},
                 {path: '/factoryList', component: './Factory/FactoryList'},
                 {path: '/factoryUserList', component: './FactoryUser/FactoryUserList'},
                 {path: '/factoryMoneyLimitList', component: './FactoryMoneyLimit/FactoryMoneyLimitList'},
