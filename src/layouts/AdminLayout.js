@@ -59,7 +59,7 @@ class AdminLayout extends React.Component {
                                 key="sub4"
                                 title={<span><Icon type="money-collect"/><span>交易管理</span></span>}
                             >
-                                <Menu.Item key="31"><Link to="/orderList">订单管理</Link></Menu.Item>
+                                <Menu.Item key="31"><Link to="/orderList">订单列表</Link></Menu.Item>
                             </SubMenu>
                             <SubMenu
                                 key="sub5"
