@@ -24,6 +24,7 @@ class Login extends PureComponent {
             if (!err) {
                 request.post(userPath + '/login', {data: this.core.value}).then(res => {
                     if (res && res.code === 1) {
+                        sessionStorage.setItem("loginName", res.data.loginName)
                         router.push('/itemList')
                     } else {
                         message.error("账号或密码错误")
