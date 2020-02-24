@@ -25,13 +25,26 @@ class Login extends PureComponent {
                 request.post(userPath + '/login', {data: this.core.value}).then(res => {
                     if (res && res.code === 1) {
                         sessionStorage.setItem("loginName", res.data.loginName)
-                        router.push('/itemList')
+                        sessionStorage.setItem("companyType", res.data.company.type)
+                        this.go(res.data.company.type + '')
                     } else {
                         message.error("账号或密码错误")
                     }
                 })
             }
         })
+    }
+    //跳转到后台页面,0：159厂，1：159分厂，2：供应商，3：管理员
+    go = (companyType) => {
+        if ('0' === companyType) {
+            router.push('/orderList')
+        } else if ('1' === companyType) {
+            router.push('/orderList')
+        } else if ('2' === companyType) {
+            router.push('/orderList')
+        } else if ('3' === companyType) {
+            router.push('/itemList')
+        }
     }
     handleEnterKey = (e) => {
         if (e.keyCode === 13) {
