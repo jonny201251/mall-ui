@@ -2,7 +2,7 @@ export default {
     /*    base: "/mall/",//前端路由的前缀
         publicPath: "/mall/",//css、img等资源的前缀*/
     targets: {
-        ie: 11
+        ie: 8
     },
     plugins: [
         ['umi-plugin-react', {

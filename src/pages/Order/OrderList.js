@@ -142,7 +142,7 @@ class OrderList extends PureComponent {
         return (
             <div>
                 <Form core={this.core} direction="horizontal">
-                    <FormItem label="订单号" name="orderId"><Input/></FormItem>
+                    <FormItem label="订单号" name="orderId"><Input style={{width:200}}/></FormItem>
                     <Button onClick={this.search} icon="search" type='primary'>查询</Button>
                 </Form>
                 {this.state.orderData ? this.showOrder() : ''}

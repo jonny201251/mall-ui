@@ -165,7 +165,7 @@ class BrandList extends PureComponent {
             <List url={brandPath + '/list'} onError={this.handleError} onMount={this.onMount}>
                 <div style={{float: 'right'}}>
                     <Filter noDefaultLayout>
-                        <Filter.Item label="品牌名称：" name="brandName"><Input/></Filter.Item>
+                        <Filter.Item label="品牌名称：" name="brandName"><Input style={{width:200}}/></Filter.Item>
                         <Filter.Search><Button icon="search" type='primary'>查询</Button></Filter.Search>
                     </Filter>
                 </div>

@@ -66,14 +66,14 @@ class BrandForm extends PureComponent {
         return (
             <Form core={this.core} layout={{label: 8, control: 16}}>
                 <FormItem style={{display: 'none'}} name="id"><Input/></FormItem>
-                <FormItem label="品牌名称" name="name" required={true}><Input/></FormItem>
-                <FormItem label="LOGO首字母" name="letter"><Input/></FormItem>
+                <FormItem label="品牌名称" name="name" required={true}><Input style={{width: 200}}/></FormItem>
+                <FormItem label="LOGO首字母" name="letter"><Input style={{width: 200}}/></FormItem>
                 <FormItem label="商品类目" name="categoryArr" required={true}>
                     <TreeSelect treeData={this.state.treeSelectData} treeCheckable
-                                showCheckedStrategy={TreeSelect.SHOW_PARENT}/>
+                                showCheckedStrategy={TreeSelect.SHOW_PARENT} style={{width: 200}}/>
                 </FormItem>
                 <FormItem label="品牌LOGO" help={<b>仅限一张图片</b>}/>
-                <div style={{paddingLeft: 112}}>
+                <div style={{paddingLeft: 112,width: 312}}>
                     <Upload.Dragger listType='picture'
                                     beforeUpload={this.beforeUpload} onRemove={this.onRemove}
                                     className={styles.upload} defaultFileList={this.state.defaultFileList}>
@@ -86,7 +86,7 @@ class BrandForm extends PureComponent {
                           defaultMinWidth={false} layout={{label: 8, control: 4}}>
                     <Input/>
                 </FormItem>
-                <FormItem label="备注" name="comment"><Input.TextArea/></FormItem>
+                <FormItem label="备注" name="comment"><Input.TextArea style={{width: 200}}/></FormItem>
             </Form>
         )
     }

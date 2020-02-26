@@ -44,9 +44,9 @@ class SpecificationGroupForm extends PureComponent {
         return (
             <Form core={this.core} layout={{label: 8, control: 16}}>
                 <FormItem style={{display: 'none'}} name="id"><Input/></FormItem>
-                <FormItem label="规格组" name="name" required={true}><Input/></FormItem>
+                <FormItem label="规格组" name="name" required={true}><Input style={{width: 200}}/></FormItem>
                 <FormItem label="商品类目" name="categoryId" required={true}>
-                    <TreeSelect treeData={this.state.treeSelectData} treeDefaultExpandAll/>
+                    <TreeSelect treeData={this.state.treeSelectData} treeDefaultExpandAll style={{width: 200}}/>
                 </FormItem>
                 <FormItem style={{display: this.state.display}} label="排序" name="sort"
                           defaultMinWidth={false} layout={{label: 8, control: 4}}>

@@ -116,7 +116,7 @@ class CategoryList extends PureComponent {
             <List url={categoryPath + '/list'} onError={this.handleError} onMount={this.onMount}>
                 <div style={{float: 'right'}}>
                     <Filter noDefaultLayout>
-                        <Filter.Item label="类目名称：" name="categoryName"><Input/></Filter.Item>
+                        <Filter.Item label="类目名称：" name="categoryName"><Input style={{width:200}}/></Filter.Item>
                         <Filter.Search><Button icon="search" type='primary'>查询</Button></Filter.Search>
                     </Filter>
                 </div>

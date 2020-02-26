@@ -72,7 +72,7 @@ class ItemList extends PureComponent {
         return (
             <List url={spuPath + '/list'} onError={this.handleError} onMount={this.onMount}>
                 <Filter noDefaultLayout>
-                    <Filter.Item label="商品标题：" name="title"><Input/></Filter.Item>
+                    <Filter.Item label="商品标题：" name="title"><Input style={{width:200}}/></Filter.Item>
                     <Filter.Search><Button icon="search" type='primary'>查询</Button></Filter.Search>
                 </Filter>
                 {/*                <div className={classNames(styles.marginTop10, styles.marginBottom10)}>
