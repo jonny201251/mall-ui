@@ -1,6 +1,7 @@
 import React, {PureComponent} from 'react'
 import {Button, Descriptions, Pagination} from 'antd'
-import router from 'umi/router'
+import Form, {FormCore, FormItem} from 'noform'
+import {Input} from 'nowrapper/lib/antd'
 import Link from 'umi/link'
 
 import request from '../../utils/request'
@@ -14,8 +15,13 @@ class OrderList extends PureComponent {
         pageSize: 5
     }
 
+    constructor(props) {
+        super(props);
+        this.core = new FormCore();
+    }
+
     getOrderData = (currentPage) => {
-        request.get(orderPath + '/orderList?currentPage=' + currentPage + "&pageSize=" + this.state.pageSize).then(res => {
+        request.get(orderPath + '/orderList?currentPage=' + currentPage + "&pageSize=" + this.state.pageSize+"&orderId="+(this.core.getValue("orderId") || "")).then(res => {
             if (res && res.code === 1) {
                 this.setState({orderData: res.data})
             }
@@ -128,9 +134,17 @@ class OrderList extends PureComponent {
         }
     }
 
+    search = () => {
+       this.getOrderData(this.state.currentPage)
+    }
+
     render() {
         return (
             <div>
+                <Form core={this.core} direction="horizontal">
+                    <FormItem label="订单号" name="orderId"><Input/></FormItem>
+                    <Button onClick={this.search} icon="search" type='primary'>查询</Button>
+                </Form>
                 {this.state.orderData ? this.showOrder() : ''}
                 {this.state.orderData ? this.showPagination() : ''}
             </div>

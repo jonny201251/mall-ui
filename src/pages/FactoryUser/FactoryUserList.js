@@ -110,7 +110,7 @@ class FactoryUserList extends PureComponent {
     render() {
         return (
             <List url={factoryPath + '/list'} onMount={this.onMount}>
-                <div className={classNames(styles.marginTop10, styles.marginBottom10)}>
+                <div className={classNames(styles.marginBottom10)}>
                     <Button icon="plus" type="primary" onClick={() => this.handleOperator('create')}>新增</Button>
                     <Button icon="edit" type="primary" onClick={() => this.handleOperator('edit')}
                             className={styles.marginLeft20}>编辑</Button>

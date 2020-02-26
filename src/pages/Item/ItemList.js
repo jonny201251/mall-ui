@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react'
 import {message, Modal} from 'antd'
 import List, {Filter, Pagination, Table} from 'nolist/lib/wrapper/antd'
-import {Dialog, Input} from 'nowrapper/lib/antd'
+import {Button, Dialog, Input} from 'nowrapper/lib/antd'
 
 import request from '../../utils/request'
 import router from 'umi/router'
@@ -71,9 +71,9 @@ class ItemList extends PureComponent {
     render() {
         return (
             <List url={spuPath + '/list'} onError={this.handleError} onMount={this.onMount}>
-                <Filter cols={5}>
-                    <Filter.Item label="username" name="username"><Input/></Filter.Item>
-                    <Filter.Item label="age" name="age"><Input/></Filter.Item>
+                <Filter noDefaultLayout>
+                    <Filter.Item label="商品标题：" name="title"><Input/></Filter.Item>
+                    <Filter.Search><Button icon="search" type='primary'>查询</Button></Filter.Search>
                 </Filter>
                 {/*                <div className={classNames(styles.marginTop10, styles.marginBottom10)}>
                     <Button icon="plus" type="primary" onClick={() => this.handleOperator('create')}>发布商品</Button>

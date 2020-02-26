@@ -163,11 +163,13 @@ class BrandList extends PureComponent {
     render() {
         return (
             <List url={brandPath + '/list'} onError={this.handleError} onMount={this.onMount}>
-                <Filter cols={5}>
-                    <Filter.Item label="username" name="username"><Input/></Filter.Item>
-                    <Filter.Item label="age" name="age"><Input/></Filter.Item>
-                </Filter>
-                <div className={classNames(styles.marginTop10, styles.marginBottom10)}>
+                <div style={{float: 'right'}}>
+                    <Filter noDefaultLayout>
+                        <Filter.Item label="品牌名称：" name="brandName"><Input/></Filter.Item>
+                        <Filter.Search><Button icon="search" type='primary'>查询</Button></Filter.Search>
+                    </Filter>
+                </div>
+                <div className={classNames(styles.marginBottom10)}>
                     <Button icon="plus" type="primary" onClick={() => this.handleOperator('create')}>新增</Button>
                     <Button icon="edit" type="primary" onClick={() => this.handleOperator('edit')}
                             className={styles.marginLeft20}>编辑</Button>
