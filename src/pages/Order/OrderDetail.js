@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react'
-import {Descriptions, Breadcrumb, PageHeader} from 'antd'
+import {Descriptions, PageHeader} from 'antd'
 
 import request from '../../utils/request'
 

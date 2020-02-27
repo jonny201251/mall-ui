@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react'
-import {Breadcrumb, Button, Card, Icon, InputNumber, message} from 'antd'
+import {Breadcrumb, Button, Card, Icon, InputNumber, message, PageHeader} from 'antd'
 import Form, {FormCore, FormItem, If} from 'noform'
 import {Input, Radio, Select, TreeSelect, Upload} from 'nowrapper/lib/antd'
 import {InlineRepeater, Selectify} from 'nowrapper/lib/antd/repeater'
@@ -120,10 +120,13 @@ export default class ItemEdit extends PureComponent {
                     images: res.data.images
                 })
                 //反显表单数据
+                //品牌
+                if(res.data.brandId>0){
+                    this.core.setValue('brandId',res.data.brandId)
+                }
                 this.core.setValues({
                     'id': res.data.id,
                     'categoryId': res.data.categoryId,
-                    'brandId': res.data.brandId,
                     'title': res.data.title,
                     'subTitle': res.data.subTitle,
                     'packingList': res.data.packingList,
@@ -490,6 +493,11 @@ export default class ItemEdit extends PureComponent {
         ]
         return (
             <div>
+                <PageHeader
+                    style={{paddingLeft: 0, paddingTop: 0}}
+                    onBack={() => history.back()}
+                    subTitle="返回商品列表"
+                />
                 <Form core={this.core} direction="vertical-top">
                     <FormItem style={{display: 'none'}} name="id"><Input/></FormItem>
                     <Card>
