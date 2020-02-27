@@ -399,7 +399,7 @@ export default class ItemAdd extends PureComponent {
                     <FormItem style={{display: 'none'}} name="id"><Input/></FormItem>
                     <Card>
                         <FormItem label="商品的类目" name="categoryId" required={true}>
-                            <TreeSelect treeData={this.state.treeSelectData} treeDefaultExpandAll
+                            <TreeSelect treeData={this.state.treeSelectData}
                                         onSelect={(value, node, extra,) => this.onSelect(value, node, extra)}/>
                         </FormItem>
                         <div style={{marginTop: 20}}>

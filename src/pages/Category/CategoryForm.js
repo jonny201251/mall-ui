@@ -54,11 +54,11 @@ class CategoryForm extends PureComponent {
                 <FormItem style={{display: 'none'}} name="id"><Input/></FormItem>
                 <FormItem label="类目名称" name="name" required={true}><Input style={{width: 200}}/></FormItem>
                 <FormItem label="上级类目" name="pid">
-                    <TreeSelect treeData={this.state.treeSelectData} treeDefaultExpandAll style={{width: 200}}/>
+                    <TreeSelect treeData={this.state.treeSelectData} style={{width: 200}}/>
                 </FormItem>
-                <FormItem label="规格模板" name="template" defaultValue={0}>
+{/*                <FormItem label="规格模板" name="template" defaultValue={0}>
                     <Select options={templateOption} style={{width: 200}}/>
-                </FormItem>
+                </FormItem>*/}
                 <FormItem style={{display: this.state.display}} label="使用状态" name="status">
                     <Radio.Group options={statusOption} style={{width: 200}}/>
                 </FormItem>
