@@ -87,7 +87,7 @@ class ItemList extends PureComponent {
                     }
                 }}>
                     <Table.Column title="标题" dataIndex="title"/>
-                    <Table.Column title="价格" dataIndex="tmpPrice"/>
+                    <Table.Column title="价格(元)" dataIndex="tmpPrice"/>
                     <Table.Column title="库存" dataIndex="tmpStock"/>
                     <Table.Column title="操作" render={this.renderOperation}/>
                 </Table>

@@ -365,7 +365,8 @@ export default class ItemAdd extends PureComponent {
                 request.post(spuPath + '/add', {data: formData}).then(res => {
                     if (res && res.code === 1) {
                         message.success("操作成功")
-                        router.push('/itemList')
+                        // router.push('/itemList')
+                        window.location.href ='/itemList'
                     } else {
                         message.error("操作失败")
                     }
