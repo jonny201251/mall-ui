@@ -44,7 +44,7 @@ class AdminLayout extends React.Component {
     displayMenu = () => {
         let companyType = sessionStorage.getItem("companyType")
         if ('0' === companyType) {
-            return <Menu theme="dark" mode="inline" defaultSelectedKeys={['31']}
+            return <Menu theme="dark" mode="inline" defaultSelectedKeys={['']}
                          defaultOpenKeys={['sub4', 'sub5']}>
                 <SubMenu
                     key="sub4"
@@ -62,7 +62,7 @@ class AdminLayout extends React.Component {
                 </SubMenu>
             </Menu>
         } else if ('1' === companyType) {
-            return <Menu theme="dark" mode="inline" defaultSelectedKeys={['31']}
+            return <Menu theme="dark" mode="inline" defaultSelectedKeys={['']}
                          defaultOpenKeys={['sub4']}>
                 <SubMenu
                     key="sub4"
@@ -72,7 +72,7 @@ class AdminLayout extends React.Component {
                 </SubMenu>
             </Menu>
         } else if ('2' === companyType) {
-            return <Menu theme="dark" mode="inline" defaultSelectedKeys={['31']}
+            return <Menu theme="dark" mode="inline" defaultSelectedKeys={['']}
                          defaultOpenKeys={['sub1', 'sub4']}>
                 <SubMenu
                     key="sub1"
@@ -89,7 +89,7 @@ class AdminLayout extends React.Component {
                 </SubMenu>
             </Menu>
         } else if ('3' === companyType) {
-            return <Menu theme="dark" mode="inline" defaultSelectedKeys={['8']}
+            return <Menu theme="dark" mode="inline" defaultSelectedKeys={['']}
                          defaultOpenKeys={['sub1', 'sub22', 'sub33']}>
                 <SubMenu
                     key="sub1"

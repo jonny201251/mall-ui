@@ -113,6 +113,7 @@ export default class ItemAdd extends PureComponent {
         //先重置数据
         this.core.reset()
         this.core2.reset()
+        this.core.setValue('tmpStock',50000)
         this.setState({
             //商品图片
             fileList: [],
