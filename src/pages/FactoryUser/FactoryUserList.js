@@ -10,7 +10,6 @@ import styles from "../common.less";
 
 let globalList
 const factoryUserPath = '/mall/factoryUser'
-const factoryPath = '/mall/factory'
 
 class FactoryUserList extends PureComponent {
     state = {}
@@ -109,7 +108,7 @@ class FactoryUserList extends PureComponent {
 
     render() {
         return (
-            <List url={factoryPath + '/list'} onMount={this.onMount}>
+            <List url={factoryUserPath + '/list'} onMount={this.onMount}>
                 <div className={classNames(styles.marginBottom10)}>
                     <Button icon="plus" type="primary" onClick={() => this.handleOperator('create')}>新增</Button>
                     <Button icon="edit" type="primary" onClick={() => this.handleOperator('edit')}
@@ -121,7 +120,8 @@ class FactoryUserList extends PureComponent {
                         onDoubleClick: () => this.clickOperation('onDoubleClick', record)
                     }
                 }}>
-                    <Table.Column title="分厂名称" dataIndex="name"/>
+                    <Table.Column title="分厂名称" dataIndex="company.name"/>
+                    <Table.Column title="登录名" dataIndex="loginName"/>
                     <Table.Column title="创建时间" dataIndex="createTime"/>
                 </Table>
                 <Pagination/>

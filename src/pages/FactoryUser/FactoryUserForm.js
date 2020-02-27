@@ -1,13 +1,13 @@
 import React, {PureComponent} from 'react'
-import Form, {FormItem, FormCore} from 'noform'
+import Form, {FormCore, FormItem} from 'noform'
 import {Input, Select} from 'nowrapper/lib/antd'
-import {InlineRepeater, Selectify} from 'nowrapper/lib/antd/repeater'
 import request from '../../utils/request'
 
-let SelectInlineRepeater = Selectify(InlineRepeater)
 
 const validate = {
-    name: {type: "string", required: true, message: '分厂名称不能为空'}
+    companyId: {type: "number", required: true, message: '分厂名称不能为空'},
+    loginName: {type: "string", required: true, message: '登录名不能为空'},
+    loginPassword: {type: "string", required: true, message: '登录密码不能为空'}
 }
 const factoryPath = '/mall/factory'
 
@@ -38,16 +38,15 @@ class FactoryUserForm extends PureComponent {
     render() {
         return (
             <Form core={this.core} layout={{label: 8, control: 16}} direction="vertical-top">
+                <FormItem style={{display: 'none'}} name="id"><Input/></FormItem>
                 <FormItem label="分厂名称" name="companyId" required={true}>
-                    <Select options={this.state.selectData}/>
+                    <Select options={this.state.selectData} style={{width: 200}}/>
                 </FormItem>
-                <FormItem name="users">
-                    <SelectInlineRepeater locale='zh' selectMode="multiple" multiple>
-                        <FormItem label='登录名' name="loginName" defaultMinWidth={false}><Input
-                            style={{width: 120}}/></FormItem>
-                        <FormItem label='登录密码' name="loginPassword" defaultMinWidth={false}><Input
-                            style={{width: 120}}/></FormItem>
-                    </SelectInlineRepeater>
+                <FormItem label="登录名" name="loginName" required={true}>
+                    <Input style={{width: 200}}/>
+                </FormItem>
+                <FormItem label="登录密码" name="loginPassword" required={true}>
+                    <Input style={{width: 200}}/>
                 </FormItem>
             </Form>
         )
