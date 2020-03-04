@@ -1,6 +1,6 @@
 export default {
-    /*    base: "/mall/",//前端路由的前缀
-        publicPath: "/mall/",//css、img等资源的前缀*/
+    // base: "/mall/",//前端路由的前缀
+    // publicPath: "/mall/back/",//css、img等资源的前缀
     targets: {
         ie: 8
     },
@@ -32,11 +32,17 @@ export default {
             path: '/',
             component: '../layouts/AdminLayout',
             routes: [
-                {path: '/', redirect: '/categoryList'},
+                {path: '/', redirect: '/user/login'},
                 {path: '/categoryList', component: './Category/CategoryList'},
                 {path: '/brandList', component: './Brand/BrandList'},
-                {path: '/complexSpecGroupList', component: './ComplexSpecification/SpecificationGroup/SpecificationGroupList'},
-                {path: '/complexSpecParamList', component: './ComplexSpecification/SpecificationParam/SpecificationParamList'},
+                {
+                    path: '/complexSpecGroupList',
+                    component: './ComplexSpecification/SpecificationGroup/SpecificationGroupList'
+                },
+                {
+                    path: '/complexSpecParamList',
+                    component: './ComplexSpecification/SpecificationParam/SpecificationParamList'
+                },
                 {path: '/easySpecParamList', component: './EasySpecification/EasySpecParamList'},
                 {path: '/itemList', component: './Item/ItemList'},
                 {path: '/itemAdd', component: './Item/ItemAdd/ItemAdd'},
@@ -51,9 +57,9 @@ export default {
             ]
         }
     ],
-        theme:{
-            "primary-color": "#1DA57A"
-        },
+    theme: {
+        "primary-color": "#1DA57A"
+    },
     proxy: {
         '/mall': {
             target: 'http://localhost:8082',

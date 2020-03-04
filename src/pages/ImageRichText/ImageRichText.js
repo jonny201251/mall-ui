@@ -9,9 +9,12 @@ import 'braft-editor/dist/index.css'
 import BraftEditor from 'braft-editor'
 import {ContentUtils} from 'braft-utils'
 
+import Constants from '../../utils/constants'
+
+const adminPath = Constants.hostPath
 
 const adminControllerPath = '/mall/spu'
-const adminPath = 'http://localhost:8082/mall'
+
 
 export default class ImageRichText extends PureComponent {
     state = {

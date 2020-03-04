@@ -5,9 +5,10 @@ import {Input} from 'nowrapper/lib/antd'
 import Link from 'umi/link'
 
 import request from '../../utils/request'
+import Constants from '../../utils/constants'
 
 const orderPath = '/mall/order'
-const hostPath = 'http://localhost:8082/mall'
+const hostPath = Constants.hostPath
 
 class OrderList extends PureComponent {
     state = {
@@ -21,7 +22,7 @@ class OrderList extends PureComponent {
     }
 
     getOrderData = (currentPage) => {
-        request.get(orderPath + '/orderList?currentPage=' + currentPage + "&pageSize=" + this.state.pageSize+"&orderId="+(this.core.getValue("orderId") || "")).then(res => {
+        request.get(orderPath + '/orderList?currentPage=' + currentPage + "&pageSize=" + this.state.pageSize + "&orderId=" + (this.core.getValue("orderId") || "")).then(res => {
             if (res && res.code === 1) {
                 this.setState({orderData: res.data})
             }
@@ -29,6 +30,13 @@ class OrderList extends PureComponent {
     }
 
     componentWillMount() {
+        //判断是否已登录
+        let companyType = sessionStorage.getItem("companyType")
+        if(!companyType){
+            //未登录
+            window.location.href = hostPath+'/user/login'
+            return
+        }
         //获取订单
         this.getOrderData(this.state.currentPage)
     }
@@ -135,14 +143,14 @@ class OrderList extends PureComponent {
     }
 
     search = () => {
-       this.getOrderData(this.state.currentPage)
+        this.getOrderData(this.state.currentPage)
     }
 
     render() {
         return (
             <div>
                 <Form core={this.core} direction="horizontal">
-                    <FormItem label="订单号" name="orderId"><Input style={{width:200}}/></FormItem>
+                    <FormItem label="订单号" name="orderId"><Input style={{width: 200}}/></FormItem>
                     <Button onClick={this.search} icon="search" type='primary'>查询</Button>
                 </Form>
                 {this.state.orderData ? this.showOrder() : ''}

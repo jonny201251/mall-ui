@@ -1,5 +1,5 @@
 import React from 'react'
-import {Icon, Layout, ConfigProvider, Menu, Dropdown} from 'antd'
+import {ConfigProvider, Dropdown, Icon, Layout, Menu} from 'antd'
 //antd、noform、nowrapper、nolist的样式
 import 'antd/dist/antd.less'
 import 'nowrapper/dist/antd/index.css'
@@ -9,7 +9,6 @@ import 'nolist/dist/wrapper/antd.css'
 import zhCN from 'antd/es/locale/zh_CN'
 import Link from 'umi/link'
 import styles from './AdminLayout.less'
-import router from "umi/router";
 
 const {Header, Sider, Content} = Layout;
 const {SubMenu} = Menu

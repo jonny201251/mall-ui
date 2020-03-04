@@ -5,11 +5,12 @@ import {Button, Dialog, Input} from 'nowrapper/lib/antd'
 
 import request from '../../utils/request'
 import router from 'umi/router'
+import Constants from '../../utils/constants'
 
 let globalList
 const spuPath = '/mall/spu'
 const hostName = ''
-const hostPath = 'http://localhost:8082/mall'
+const hostPath = Constants.hostPath
 
 class ItemList extends PureComponent {
     state = {}

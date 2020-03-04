@@ -4,12 +4,12 @@ import Form, {FormCore, FormItem} from 'noform'
 import {Input, TreeSelect, Upload} from 'nowrapper/lib/antd'
 import request from '../../utils/request'
 import styles from './upload.less'
-
+import Constants from '../../utils/constants'
 const validate = {
     name: {type: "string", required: true, message: '品牌名称不能为空'}
 }
 const categoryPath = '/mall/category'
-const hostPath = 'http://localhost:8082/mall'
+const hostPath = Constants.hostPath
 
 class BrandForm extends PureComponent {
     state = {

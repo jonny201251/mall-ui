@@ -12,6 +12,7 @@ import {ContentUtils} from 'braft-utils'
 import SubImageUpload from "./SubImageUpload"
 
 import router from "umi/router"
+import Constants from '../../../utils/constants'
 
 const SelectInlineRepeater = Selectify(InlineRepeater)
 
@@ -29,7 +30,7 @@ const trueOrFalse = [
 const categoryPath = '/mall/category'
 const spuPath = '/mall/spu'
 const brandPath = '/mall/brand'
-const hostPath = 'http://localhost:8082/mall'
+const hostPath = Constants.hostPath
 export default class ItemEdit extends PureComponent {
     state = {
         treeSelectData: [],

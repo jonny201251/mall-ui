@@ -3,8 +3,9 @@ import {Icon} from 'antd'
 import Form, {FormCore, FormItem} from 'noform'
 import {Input, TreeSelect, Upload} from 'nowrapper/lib/antd'
 import uploadStyle from './upload.less'
+import Constants from '../../../utils/constants'
 
-const hostPath = 'http://localhost:8082/mall'
+const hostPath = Constants.hostPath
 export default class SubImageUpload extends PureComponent {
     state = {
         defaultFileList: []

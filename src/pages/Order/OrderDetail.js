@@ -2,9 +2,10 @@ import React, {PureComponent} from 'react'
 import {Descriptions, PageHeader} from 'antd'
 
 import request from '../../utils/request'
+import Constants from '../../utils/constants'
 
 const orderPath = '/mall/order'
-const hostPath = 'http://localhost:8082/mall'
+const hostPath = Constants.hostPath
 
 class OrderDetail extends PureComponent {
     state = {
