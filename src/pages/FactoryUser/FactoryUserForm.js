@@ -7,7 +7,8 @@ import request from '../../utils/request'
 const validate = {
     companyId: {type: "number", required: true, message: '分厂名称不能为空'},
     loginName: {type: "string", required: true, message: '登录名不能为空'},
-    loginPassword: {type: "string", required: true, message: '登录密码不能为空'}
+    loginPassword: {type: "string", required: true, message: '登录密码不能为空'},
+    mobile: {type: "string", required: true, message: '手机号不能为空'}
 }
 const factoryPath = '/mall/factory'
 
@@ -46,6 +47,9 @@ class FactoryUserForm extends PureComponent {
                     <Input style={{width: 200}}/>
                 </FormItem>
                 <FormItem label="登录密码" name="loginPassword" required={true}>
+                    <Input style={{width: 200}}/>
+                </FormItem>
+                <FormItem label="手机号" name="mobile" required={true}>
                     <Input style={{width: 200}}/>
                 </FormItem>
             </Form>

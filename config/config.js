@@ -47,6 +47,7 @@ export default {
                 {path: '/factoryList', component: './Factory/FactoryList'},
                 {path: '/factoryUserList', component: './FactoryUser/FactoryUserList'},
                 {path: '/factoryMoneyLimitList', component: './FactoryMoneyLimit/FactoryMoneyLimitList'},
+                {path: '/receiveAddressList', component: './ReceiveAddress/ReceiveAddressList'},
             ]
         }
     ],

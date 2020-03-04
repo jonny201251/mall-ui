@@ -69,6 +69,7 @@ class AdminLayout extends React.Component {
                     title={<span><Icon type="money-collect"/><span>交易管理</span></span>}
                 >
                     <Menu.Item key="31"><Link to="/orderList">订单列表</Link></Menu.Item>
+                    <Menu.Item key="331"><Link to="/receiveAddressList">收货人信息</Link></Menu.Item>
                 </SubMenu>
             </Menu>
         } else if ('2' === companyType) {
