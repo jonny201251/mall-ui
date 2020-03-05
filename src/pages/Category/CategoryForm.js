@@ -2,6 +2,7 @@ import React, {PureComponent} from 'react'
 import Form, {FormCore, FormItem} from 'noform'
 import {Input, Radio, TreeSelect, Select} from 'nowrapper/lib/antd'
 import request from '../../utils/request'
+import Constants from '../../utils/constants'
 
 const validate = {
     name: {type: "string", required: true, message: '类目名称不能为空'}
@@ -16,7 +17,7 @@ const templateOption = [
     {label: '复杂规格', value: 1}
 ]
 
-const categoryPath = '/mall/category'
+const categoryPath = Constants.backContextPath+'/category'
 
 class CategoryForm extends PureComponent {
     state = {

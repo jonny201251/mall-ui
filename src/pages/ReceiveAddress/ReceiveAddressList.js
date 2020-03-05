@@ -5,11 +5,12 @@ import {Button, Dialog, Input} from 'nowrapper/lib/antd'
 
 import ReceiveAddressForm from "./ReceiveAddressForm"
 import request from '../../utils/request'
+import Constants from '../../utils/constants'
 import classNames from "classnames";
 import styles from "../common.less";
 
 let globalList
-const factoryPath = '/mall/receiveAddress'
+const factoryPath = Constants.backContextPath+'/receiveAddress'
 
 class ReceiveAddressList extends PureComponent {
     state = {}

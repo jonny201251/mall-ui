@@ -2,6 +2,7 @@ import React, {PureComponent} from 'react'
 import Form, {FormCore, FormItem} from 'noform'
 import {Input, Select} from 'nowrapper/lib/antd'
 import request from '../../utils/request'
+import Constants from '../../utils/constants'
 
 
 const validate = {
@@ -10,7 +11,7 @@ const validate = {
     loginPassword: {type: "string", required: true, message: '登录密码不能为空'},
     mobile: {type: "string", required: true, message: '手机号不能为空'}
 }
-const factoryPath = '/mall/factory'
+const factoryPath = Constants.backContextPath+'/factory'
 
 class FactoryUserForm extends PureComponent {
     state = {

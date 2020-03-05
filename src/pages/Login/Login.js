@@ -2,16 +2,16 @@ import React, {PureComponent} from 'react'
 import {Button, Input} from 'nowrapper/lib/antd'
 import Form, {FormCore, FormItem} from 'noform'
 import {Icon, message} from "antd";
-import request from "../../utils/request";
+import request from "../../utils/request"
+import Constants from '../../utils/constants'
 import styles from './login.less'
-import Link from 'umi/link'
 import router from 'umi/router'
 
 const validate = {
     loginName: {type: "string", required: true, message: '登录名不能为空'},
     loginPassword: {type: "string", required: true, message: '登录密码不能为空'},
 }
-const userPath = '/mall/admin'
+const userPath = Constants.backContextPath+'/admin'
 
 class Login extends PureComponent {
     constructor(props) {

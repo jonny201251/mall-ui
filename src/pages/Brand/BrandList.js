@@ -8,10 +8,11 @@ import styles from '../common.less'
 
 import BrandForm from './BrandForm'
 import request from '../../utils/request'
+import Constants from '../../utils/constants'
 
 let globalList
-const adminContextPath = '/mall'
-const brandPath = '/mall/brand'
+const adminContextPath = Constants.backContextPath
+const brandPath = Constants.backContextPath+'/brand'
 
 
 class BrandList extends PureComponent {

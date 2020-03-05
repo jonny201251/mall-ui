@@ -8,9 +8,10 @@ import styles from '../common.less'
 
 import CategoryForm from './CategoryForm'
 import request from '../../utils/request'
+import Constants from '../../utils/constants'
 
 let globalList
-const categoryPath = '/mall/category'
+const categoryPath = Constants.backContextPath+'/category'
 
 class CategoryList extends PureComponent {
     state = {}

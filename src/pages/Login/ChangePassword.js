@@ -3,8 +3,9 @@ import {Input, Button, Select, Dialog} from 'nowrapper/lib/antd'
 import Form, {FormItem, FormCore} from 'noform'
 import {Card, message} from "antd"
 import request from "../../utils/request"
+import Constants from '../../utils/constants'
 
-const userPath = '/mall/sysUser'
+const userPath = Constants.backContextPath+'/sysUser'
 const validate = {
     loginPassword: {type: "string", required: true, message: '原密码不能为空'},
     newPassword: {type: "string", required: true, message: '新密码不能为空'},

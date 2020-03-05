@@ -4,13 +4,14 @@ import List, {Pagination, Table} from 'nolist/lib/wrapper/antd'
 import {Button, Dialog} from 'nowrapper/lib/antd'
 
 import request from '../../utils/request'
+import Constants from '../../utils/constants'
 import FactoryMoneyLimitForm from "./FactoryMoneyLimitForm"
 import classNames from "classnames";
 import styles from "../common.less";
 
 let globalList
-const factoryMoneyLimitPath = '/mall/factoryMoneyLimit'
-const factoryPath = '/mall/factory'
+const factoryMoneyLimitPath = Constants.backContextPath+'/factoryMoneyLimit'
+const factoryPath = Constants.backContextPath+'/factory'
 
 class FactoryMoneyLimitList extends PureComponent {
     state = {}

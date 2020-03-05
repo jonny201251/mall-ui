@@ -2,12 +2,13 @@ import React, {PureComponent} from 'react'
 import Form, {FormCore, FormItem} from 'noform'
 import {Input, TreeSelect} from 'nowrapper/lib/antd'
 import request from '../../../utils/request'
+import Constants from '../../../utils/constants'
 
 const validate = {
     name: {type: "string", required: true, message: '规格组不能为空'},
     categoryId: {type: "integer", required: true, message: '商品类目不能为空'}
 }
-const categoryPath = '/mall/category'
+const categoryPath = Constants.backContextPath+'/category'
 
 class SpecificationGroupForm extends PureComponent {
     state = {

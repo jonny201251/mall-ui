@@ -4,7 +4,7 @@ import {Descriptions, PageHeader} from 'antd'
 import request from '../../utils/request'
 import Constants from '../../utils/constants'
 
-const orderPath = '/mall/order'
+const orderPath = Constants.backContextPath+'/order'
 const hostPath = Constants.hostPath
 
 class OrderDetail extends PureComponent {

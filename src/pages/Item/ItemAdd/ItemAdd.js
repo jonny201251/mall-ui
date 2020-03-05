@@ -25,9 +25,9 @@ const trueOrFalse = [
     {label: '否', value: 0}
 ]
 
-const categoryPath = '/mall/category'
-const spuPath = '/mall/spu'
-const brandPath = '/mall/brand'
+const categoryPath = Constants.backContextPath+'/category'
+const spuPath = Constants.backContextPath+'/spu'
+const brandPath = Constants.backContextPath+'/brand'
 const hostPath = Constants.hostPath
 export default class ItemAdd extends PureComponent {
     state = {

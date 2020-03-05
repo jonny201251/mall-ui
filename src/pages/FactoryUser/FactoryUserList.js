@@ -4,12 +4,13 @@ import List, {Filter, Pagination, Table} from 'nolist/lib/wrapper/antd'
 import {Button, Dialog, Input} from 'nowrapper/lib/antd'
 
 import request from '../../utils/request'
+import Constants from '../../utils/constants'
 import FactoryUserForm from "./FactoryUserForm"
 import classNames from "classnames";
 import styles from "../common.less";
 
 let globalList
-const factoryUserPath = '/mall/factoryUser'
+const factoryUserPath = Constants.backContextPath + '/factoryUser'
 
 class FactoryUserList extends PureComponent {
     state = {}

@@ -4,6 +4,7 @@ import Form, {FormCore, FormItem, If} from 'noform'
 import {Input, Radio, Select, TreeSelect, Upload} from 'nowrapper/lib/antd'
 import {InlineRepeater, Selectify} from 'nowrapper/lib/antd/repeater'
 import request from '../../../utils/request'
+import Constants from '../../../utils/constants'
 //editor
 import 'braft-editor/dist/index.css'
 import BraftEditor from 'braft-editor'
@@ -12,7 +13,6 @@ import {ContentUtils} from 'braft-utils'
 import SubImageUpload from "./SubImageUpload"
 
 import router from "umi/router"
-import Constants from '../../../utils/constants'
 
 const SelectInlineRepeater = Selectify(InlineRepeater)
 
@@ -27,9 +27,9 @@ const trueOrFalse = [
     {label: '否', value: 0}
 ]
 
-const categoryPath = '/mall/category'
-const spuPath = '/mall/spu'
-const brandPath = '/mall/brand'
+const categoryPath = Constants.backContextPath + '/category'
+const spuPath = Constants.backContextPath + '/spu'
+const brandPath = Constants.backContextPath + '/brand'
 const hostPath = Constants.hostPath
 export default class ItemEdit extends PureComponent {
     state = {
@@ -122,8 +122,8 @@ export default class ItemEdit extends PureComponent {
                 })
                 //反显表单数据
                 //品牌
-                if(res.data.brandId>0){
-                    this.core.setValue('brandId',res.data.brandId)
+                if (res.data.brandId > 0) {
+                    this.core.setValue('brandId', res.data.brandId)
                 }
                 this.core.setValues({
                     'id': res.data.id,

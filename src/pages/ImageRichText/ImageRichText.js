@@ -13,7 +13,7 @@ import Constants from '../../utils/constants'
 
 const adminPath = Constants.hostPath
 
-const adminControllerPath = '/mall/spu'
+const adminControllerPath = Constants.backContextPath+'/spu'
 
 
 export default class ImageRichText extends PureComponent {

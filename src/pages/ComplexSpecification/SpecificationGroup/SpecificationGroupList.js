@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react'
-import {Col, message, Modal, Row, Tree, Breadcrumb} from 'antd'
+import {Breadcrumb, Col, message, Modal, Row, Tree} from 'antd'
 import List, {Pagination, Table} from 'nolist/lib/wrapper/antd'
 import {Button, Dialog} from 'nowrapper/lib/antd'
 
@@ -7,11 +7,11 @@ import styles from '../../common.less'
 
 import SpecificationGroupForm from './SpecificationGroupForm'
 import request from '../../../utils/request'
-import EasySpecParamForm from "../../EasySpecification/EasySpecParamForm";
+import Constants from '../../../utils/constants'
 
 let globalList
-const complexSpecGroupPath = '/mall/complexSpecGroup'
-const categoryPath = '/mall/category'
+const complexSpecGroupPath = Constants.backContextPath+'/complexSpecGroup'
+const categoryPath = Constants.backContextPath+'/category'
 
 class SpecificationGroupList extends PureComponent {
     state = {

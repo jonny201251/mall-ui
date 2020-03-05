@@ -7,7 +7,7 @@ import Link from 'umi/link'
 import request from '../../utils/request'
 import Constants from '../../utils/constants'
 
-const orderPath = '/mall/order'
+const orderPath = Constants.backContextPath + '/order'
 const hostPath = Constants.hostPath
 
 class OrderList extends PureComponent {
@@ -32,9 +32,9 @@ class OrderList extends PureComponent {
     componentWillMount() {
         //判断是否已登录
         let companyType = sessionStorage.getItem("companyType")
-        if(!companyType){
+        if (!companyType) {
             //未登录
-            window.location.href = hostPath+'/user/login'
+            window.location.href = hostPath + '/user/login'
             return
         }
         //获取订单

@@ -3,13 +3,14 @@ import Form, {FormCore, FormItem} from 'noform'
 import {Input, Select} from 'nowrapper/lib/antd'
 import {InlineRepeater, Selectify} from 'nowrapper/lib/antd/repeater'
 import request from '../../utils/request'
+import Constants from '../../utils/constants'
 
 let SelectInlineRepeater = Selectify(InlineRepeater)
 
 const validate = {
     name: {type: "string", required: true, message: '分厂名称不能为空'}
 }
-const factoryPath = '/mall/factory'
+const factoryPath = Constants.backContextPath+'/factory'
 const quarterOptions = [
     {label: '一季度', value: 0},
     {label: '二季度', value: 1},

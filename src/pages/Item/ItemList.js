@@ -8,7 +8,7 @@ import router from 'umi/router'
 import Constants from '../../utils/constants'
 
 let globalList
-const spuPath = '/mall/spu'
+const spuPath = Constants.backContextPath+'/spu'
 const hostName = ''
 const hostPath = Constants.hostPath
 

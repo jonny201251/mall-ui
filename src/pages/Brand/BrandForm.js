@@ -8,7 +8,7 @@ import Constants from '../../utils/constants'
 const validate = {
     name: {type: "string", required: true, message: '品牌名称不能为空'}
 }
-const categoryPath = '/mall/category'
+const categoryPath = Constants.backContextPath+'/category'
 const hostPath = Constants.hostPath
 
 class BrandForm extends PureComponent {

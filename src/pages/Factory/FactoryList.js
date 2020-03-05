@@ -5,11 +5,12 @@ import {Button, Dialog, Input} from 'nowrapper/lib/antd'
 
 import FactoryForm from "./FactoryForm"
 import request from '../../utils/request'
+import Constants from '../../utils/constants'
 import classNames from "classnames";
 import styles from "../common.less";
 
 let globalList
-const factoryPath = '/mall/factory'
+const factoryPath = Constants.backContextPath + '/factory'
 
 class FactoryList extends PureComponent {
     state = {}

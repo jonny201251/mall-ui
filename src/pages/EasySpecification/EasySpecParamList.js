@@ -6,10 +6,11 @@ import styles from '../common.less'
 
 import EasySpecParamForm from './EasySpecParamForm'
 import request from '../../utils/request'
+import Constants from '../../utils/constants'
 
 let globalList
-const easySpecParamPath = '/mall/easySpecParam'
-const categoryPath = '/mall/category'
+const easySpecParamPath = Constants.backContextPath+'/easySpecParam'
+const categoryPath = Constants.backContextPath+'/category'
 
 class SpecificationParamList extends PureComponent {
     state = {

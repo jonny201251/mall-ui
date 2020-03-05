@@ -2,11 +2,12 @@ import React, {PureComponent} from 'react'
 import Form, {FormCore, FormItem, If} from 'noform'
 import {Input, Radio} from 'nowrapper/lib/antd'
 import request from '../../../utils/request'
+import Constants from '../../../utils/constants'
 
 const validate = {
     name: {type: "string", required: true, message: '规格参数不能为空'}
 }
-const categoryPath = '/mall/category'
+const categoryPath = Constants.backContextPath+'/category'
 const trueOrFalse = [
     {label: '是', value: 1},
     {label: '否', value: 0}
