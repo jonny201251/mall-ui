@@ -23,7 +23,7 @@ class OrderList extends PureComponent {
     }
 
     getOrderData = (currentPage) => {
-        request.get(orderPath + '/orderList?currentPage=' + currentPage + "&pageSize=" + this.state.pageSize + "&orderId=" + (this.core.getValue("orderId") || "")+ "&companyId=" + (this.core.getValue("companyId") || "")).then(res => {
+        request.get(orderPath + '/orderList?currentPage=' + currentPage + "&pageSize=" + this.state.pageSize + "&orderId=" + (this.core.getValue("orderId") || "") + "&companyId=" + (this.core.getValue("companyId") || "")).then(res => {
             if (res && res.code === 1) {
                 this.setState({orderData: res.data})
             }
@@ -48,8 +48,9 @@ class OrderList extends PureComponent {
         this.getOrderData(this.state.currentPage)
     }
 
-    onClick = (orderId) => {
-        request.get(orderPath + '/orderCancel?orderId=' + orderId).then(res => {
+    onClick = (orderId, status) => {
+        alert(orderId + "," + status)
+        request.get(orderPath + '/orderStatus?orderId=' + orderId+'&status='+status).then(res => {
             if (res && res.code === 1) {
                 //重新获取订单
                 this.getOrderData(this.state.currentPage)
@@ -60,12 +61,45 @@ class OrderList extends PureComponent {
         let statusInfo = ''
         if (status === 0) {
             statusInfo = '等待商家发货'
+        } else if (status === 3) {
+            statusInfo = '已发货,未确认'
+        } else if (status === 8) {
+            statusInfo = '确认收货'
+        } else if (status === 4) {
+            statusInfo = '交易成功'
         } else if (status === 7) {
             statusInfo = '取消订单'
-        } else {
-            statusInfo = '交易关闭'
         }
         return statusInfo
+    }
+    showOrderStatusButton = (order) => {
+        //0、等待商家发货 3、已发货,未确认 8、确认收货 4、交易成功 7、取消订单
+        let arr = []
+        let companyType = sessionStorage.getItem("companyType")
+        if (companyType === '1') {
+            //分厂人员：取消订单、确认收货
+            if (order.orderStatus.status === 0) {
+                arr.push(<Button type="link" size="small" style={{paddingLeft: 5}}
+                                 onClick={() => this.onClick(order.orderId, '7')}>取消订单</Button>)
+            }
+            if (order.orderStatus.status === 3) {
+                arr.push(<Button type="link" size="small" style={{paddingLeft: 5}}
+                                 onClick={() => this.onClick(order.orderId, '8')}>确认收货</Button>)
+            }
+        } else if (companyType === '2') {
+            //商家：确认发货
+            if (order.orderStatus.status === 0) {
+                arr.push(<Button type="link" size="small" style={{paddingLeft: 5}}
+                                 onClick={() => this.onClick(order.orderId, '3')}>确认发货</Button>)
+            }
+        } else if (companyType === '3') {
+            //管理员：取消订单
+            if (order.orderStatus.status === 0) {
+                arr.push(<Button type="link" size="small" style={{paddingLeft: 5}}
+                                 onClick={() => this.onClick(order.orderId, '7')}>取消订单</Button>)
+            }
+        }
+        return arr
     }
     showOrder = () => {
         if (this.state.orderData) {
@@ -81,10 +115,7 @@ class OrderList extends PureComponent {
                             <span style={{paddingLeft: 15}}>状态：{this.orderStatus(order.orderStatus.status)}</span>
                             <Link to={"/orderDetail?orderId=" + order.orderId} style={{paddingLeft: 15}}>查看订单</Link>
                             {
-                                order.orderStatus.status !== 7 ?
-                                    <Button type="link" size="small" style={{paddingLeft: 5}}
-                                            onClick={() => this.onClick(order.orderId)}>取消订单</Button>
-                                    : ''
+                                this.showOrderStatusButton(order)
                             }
                         </div>
                         <Descriptions size="small" column={6}>
@@ -100,10 +131,7 @@ class OrderList extends PureComponent {
                             <span style={{paddingLeft: 15}}>状态：{this.orderStatus(order.orderStatus.status)}</span>
                             <Link to={"/orderDetail?orderId=" + order.orderId} style={{paddingLeft: 15}}>查看订单</Link>
                             {
-                                order.orderStatus.status !== 7 ?
-                                    <Button type="link" size="small" style={{paddingLeft: 5}}
-                                            onClick={() => this.onClick(order.orderId)}>取消订单</Button>
-                                    : ''
+                                this.showOrderStatusButton(order)
                             }
                         </div>
                         <Descriptions size="small" column={6}>
