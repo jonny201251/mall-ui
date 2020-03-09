@@ -23,7 +23,7 @@ class OrderList extends PureComponent {
     }
 
     getOrderData = (currentPage) => {
-        request.get(orderPath + '/orderList?currentPage=' + currentPage + "&pageSize=" + this.state.pageSize + "&orderId=" + (this.core.getValue("orderId") || "")).then(res => {
+        request.get(orderPath + '/orderList?currentPage=' + currentPage + "&pageSize=" + this.state.pageSize + "&orderId=" + (this.core.getValue("orderId") || "")+ "&companyId=" + (this.core.getValue("companyId") || "")).then(res => {
             if (res && res.code === 1) {
                 this.setState({orderData: res.data})
             }
