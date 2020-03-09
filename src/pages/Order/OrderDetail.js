@@ -28,7 +28,7 @@ class OrderDetail extends PureComponent {
             return <Descriptions title="订单信息">
                 <Descriptions.Item label="订单编号">{this.state.orderData.orderId}</Descriptions.Item>
                 <Descriptions.Item label="订单状态">
-                    {this.orderStatus()}
+                    {this.orderStatus(this.state.orderData.orderStatus.status)}
                 </Descriptions.Item>
                 <Descriptions.Item label="下单时间">{this.state.orderData.createTime}</Descriptions.Item>
                 <Descriptions.Item label="商品总额">{this.state.orderData.actualPay}</Descriptions.Item>
@@ -40,16 +40,20 @@ class OrderDetail extends PureComponent {
         }
     }
 
-    orderStatus = () => {
-        let status = ''
-        if (this.state.orderData.orderStatus.status === 0) {
-            status = '等待商家发货'
-        } else if (this.state.orderData.orderStatus.status === 7) {
-            status = '取消订单'
-        } else {
-            status = '交易关闭'
+    orderStatus = (status) => {
+        let statusInfo = ''
+        if (status === 0) {
+            statusInfo = '等待商家发货'
+        } else if (status === 3) {
+            statusInfo = '已发货,未确认'
+        } else if (status === 8) {
+            statusInfo = '确认收货'
+        } else if (status === 4) {
+            statusInfo = '交易成功'
+        } else if (status === 7) {
+            statusInfo = '取消订单'
         }
-        return status
+        return statusInfo
     }
 
     showItem = () => {

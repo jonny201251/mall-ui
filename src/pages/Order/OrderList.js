@@ -11,6 +11,16 @@ const factoryPath = Constants.backContextPath + '/factory'
 const orderPath = Constants.backContextPath + '/order'
 const hostPath = Constants.hostPath
 
+//0、等待商家发货 3、已发货,未确认 8、确认收货 4、交易成功 7、取消订单
+const statusOption = [
+    {label: '所有', value: '100'},
+    {label: '等待商家发货', value: '0'},
+    {label: '已发货,未确认', value: '3'},
+    {label: '确认收货', value: '8'},
+    {label: '交易成功', value: '4'},
+    {label: '取消订单', value: '7'},
+]
+
 class OrderList extends PureComponent {
     state = {
         currentPage: 1,
@@ -23,7 +33,7 @@ class OrderList extends PureComponent {
     }
 
     getOrderData = (currentPage) => {
-        request.get(orderPath + '/orderList?currentPage=' + currentPage + "&pageSize=" + this.state.pageSize + "&orderId=" + (this.core.getValue("orderId") || "") + "&companyId=" + (this.core.getValue("companyId") || "")).then(res => {
+        request.get(orderPath + '/orderList?currentPage=' + currentPage + "&pageSize=" + this.state.pageSize + "&orderId=" + (this.core.getValue("orderId") || "") + "&companyId=" + (this.core.getValue("companyId") || "") + "&status=" + (this.core.getValue("status") || "")).then(res => {
             if (res && res.code === 1) {
                 this.setState({orderData: res.data})
             }
@@ -49,8 +59,7 @@ class OrderList extends PureComponent {
     }
 
     onClick = (orderId, status) => {
-        alert(orderId + "," + status)
-        request.get(orderPath + '/orderStatus?orderId=' + orderId+'&status='+status).then(res => {
+        request.get(orderPath + '/orderStatus?orderId=' + orderId + '&status=' + status).then(res => {
             if (res && res.code === 1) {
                 //重新获取订单
                 this.getOrderData(this.state.currentPage)
@@ -196,6 +205,9 @@ class OrderList extends PureComponent {
                 <Form core={this.core} direction="horizontal">
                     <FormItem label="订单号" name="orderId"><Input style={{width: 200}}/></FormItem>
                     {this.state.orderData ? this.showFactoryName() : ''}
+                    <FormItem label="订单状态" name="status" defaultMinWidth={false} defaultValue={'100'}>
+                        <Select options={statusOption} style={{width: 150}}/>
+                    </FormItem>
                     <Button onClick={this.search} icon="search" type='primary'>查询</Button>
                 </Form>
                 {this.state.orderData ? this.showOrder() : ''}
