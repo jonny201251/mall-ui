@@ -43,7 +43,7 @@ class OrderDetail extends PureComponent {
     orderStatus = () => {
         let status = ''
         if (this.state.orderData.orderStatus.status === 0) {
-            status = '暂不付款'
+            status = '等待商家发货'
         } else if (this.state.orderData.orderStatus.status === 7) {
             status = '取消订单'
         } else {

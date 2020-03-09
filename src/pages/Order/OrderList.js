@@ -59,7 +59,7 @@ class OrderList extends PureComponent {
     orderStatus = (status) => {
         let statusInfo = ''
         if (status === 0) {
-            statusInfo = '暂不付款'
+            statusInfo = '等待商家发货'
         } else if (status === 7) {
             statusInfo = '取消订单'
         } else {
