@@ -75,6 +75,7 @@ class OrderDetail extends PureComponent {
     showReceiver = () => {
         if (this.state.orderData) {
             return <Descriptions title="收货人信息">
+                <Descriptions.Item label="分厂名称">{this.state.orderData.company.name}</Descriptions.Item>
                 <Descriptions.Item label="收货人">{this.state.orderData.receiver}</Descriptions.Item>
                 <Descriptions.Item label="手机号码">{this.state.orderData.receiverMobile}</Descriptions.Item>
                 <Descriptions.Item label="邮编">{this.state.orderData.receiverZip}</Descriptions.Item>

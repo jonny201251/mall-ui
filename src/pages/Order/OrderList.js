@@ -1,12 +1,13 @@
 import React, {PureComponent} from 'react'
 import {Button, Descriptions, Pagination} from 'antd'
 import Form, {FormCore, FormItem} from 'noform'
-import {Input} from 'nowrapper/lib/antd'
+import {Input, Select} from 'nowrapper/lib/antd'
 import Link from 'umi/link'
 
 import request from '../../utils/request'
 import Constants from '../../utils/constants'
 
+const factoryPath = Constants.backContextPath + '/factory'
 const orderPath = Constants.backContextPath + '/order'
 const hostPath = Constants.hostPath
 
@@ -37,6 +38,12 @@ class OrderList extends PureComponent {
             window.location.href = hostPath + '/user/login'
             return
         }
+        //取出分厂
+        request.get(factoryPath + '/factoryList').then(res => {
+            if (res && res.code === 1) {
+                this.setState({selectData: res.data})
+            }
+        })
         //获取订单
         this.getOrderData(this.state.currentPage)
     }
@@ -146,11 +153,21 @@ class OrderList extends PureComponent {
         this.getOrderData(this.state.currentPage)
     }
 
+    showFactoryName = () => {
+        let companyType = sessionStorage.getItem("companyType")
+        if (sessionStorage.getItem("companyType") === '0') {
+            return <FormItem label="分厂名称" name="companyId" defaultMinWidth={false}>
+                <Select options={this.state.selectData} style={{width: 150}}/>
+            </FormItem>
+        }
+    }
+
     render() {
         return (
             <div>
                 <Form core={this.core} direction="horizontal">
                     <FormItem label="订单号" name="orderId"><Input style={{width: 200}}/></FormItem>
+                    {this.state.orderData ? this.showFactoryName() : ''}
                     <Button onClick={this.search} icon="search" type='primary'>查询</Button>
                 </Form>
                 {this.state.orderData ? this.showOrder() : ''}
