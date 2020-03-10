@@ -70,7 +70,7 @@ class BrandForm extends PureComponent {
                 <FormItem label="LOGO首字母" name="letter"><Input style={{width: 200}}/></FormItem>
                 <FormItem label="商品类目" name="categoryArr" required={true}>
                     <TreeSelect treeData={this.state.treeSelectData} treeCheckable
-                                showCheckedStrategy={TreeSelect.SHOW_PARENT} style={{width: 200}}/>
+                                showCheckedStrategy={TreeSelect.SHOW_CHILD} style={{width: 200}}/>
                 </FormItem>
                 <FormItem label="品牌LOGO" help={<b>仅限一张图片</b>}/>
                 <div style={{paddingLeft: 112,width: 312}}>
