@@ -62,7 +62,7 @@ export default {
     },
     proxy: {
         '/mall': {
-            target: 'http://localhost:8082',
+            target: 'http://localhost:8080',
             changeOrigin: true,
         },
     }
