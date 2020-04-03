@@ -1,6 +1,8 @@
 export default {
     // base: "/mall/",//前端路由的前缀
     // publicPath: "/mall/back/",//css、img等资源的前缀
+    //部署时放开
+    // publicPath: "/back/",
     targets: {
         ie: 8
     },
