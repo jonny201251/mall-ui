@@ -65,7 +65,7 @@ class OrderDetail extends PureComponent {
             this.state.orderData.orderDetails.map(item => {
                 arr.push(<Descriptions.Item span={4}>
                     <img src={item.image} width="60px" height="60px"/>
-                    {<a target="_blank" href={hostPath + '/item.html?id=' + item.id}>{item.title}</a>}
+                    {<a target="_blank" href={hostPath + '/item2.html?skuId=' + item.skuId}>{item.title}</a>}
                 </Descriptions.Item>)
                 arr.push(<Descriptions.Item>{item.price}</Descriptions.Item>)
                 arr.push(<Descriptions.Item>{item.num}</Descriptions.Item>)
